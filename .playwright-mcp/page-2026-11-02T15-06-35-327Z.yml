@@ -1,0 +1,80 @@
+- generic [ref=f1e2]:
+  - banner [ref=f1e3]:
+    - link "Triratna Akola — मुख्यपृष्ठ" [ref=f1e4] [cursor=pointer]:
+      - /url: "#top"
+      - img "Triratna Akola — by the youth, for the youth" [ref=f1e5]
+      - generic [ref=f1e6]:
+        - strong [ref=f1e7]: त्रिरत्न बौद्ध महासंघ, अकोला
+        - generic [ref=f1e8]: TRIRATNA BUDDHIST COMMUNITY
+    - navigation "पृष्ठ नेव्हिगेशन" [ref=f1e9]:
+      - link "आमच्याविषयी" [ref=f1e10] [cursor=pointer]:
+        - /url: "#top"
+  - main [ref=f1e11]:
+    - generic [ref=f1e12]:
+      - paragraph [ref=f1e13]: त्रिरत्न बौद्ध महासंघ · अकोला
+      - heading "कार्य वेळापत्रक निर्माता" [level=1] [ref=f1e14]
+      - paragraph [ref=f1e15]: तुमचा दिवस नियोजित करा, वेळापत्रक जतन करा आणि पूर्ण झालेल्या नोंदी पाहा.
+    - group "वेळापत्रक दृश्य निवडा" [ref=f1e16]:
+      - generic [ref=f1e17]:
+        - button "फक्त Editor" [ref=f1e18] [cursor=pointer]
+        - button "फक्त Table" [ref=f1e19] [cursor=pointer]
+        - button "दोन्ही" [pressed] [ref=f1e20] [cursor=pointer]
+      - button "PDF डाउनलोड" [disabled] [ref=f1e21]
+    - generic [ref=f1e22]:
+      - region [ref=f1e23]:
+        - generic [ref=f1e24]:
+          - generic [ref=f1e25]:
+            - generic [ref=f1e26]: "01"
+            - heading "वेळापत्रक तयार करा" [level=2] [ref=f1e27]
+          - generic [ref=f1e28]: सोमवार, २ नोव्हेंबर, २०२६
+        - generic [ref=f1e29]:
+          - table [ref=f1e31]:
+            - rowgroup [ref=f1e32]:
+              - row [ref=f1e33]:
+                - columnheader "Sr. No." [ref=f1e34]
+                - columnheader "Activity" [ref=f1e35]
+                - columnheader "Date" [ref=f1e36]
+                - columnheader "Start Time" [ref=f1e37]
+                - columnheader "End Time" [ref=f1e38]
+                - columnheader "Notes" [ref=f1e39]
+                - columnheader "काढा" [ref=f1e40]
+            - rowgroup [ref=f1e41]:
+              - row [ref=f1e42]:
+                - cell "01" [ref=f1e43]
+                - cell [ref=f1e44]:
+                  - textbox "Activity 1" [ref=f1e45]:
+                    - /placeholder: कार्य
+                - cell [ref=f1e46]:
+                  - textbox "Date 1" [ref=f1e47]: 2026-11-02
+                - cell [ref=f1e48]:
+                  - textbox "Start Time 1" [ref=f1e49]
+                - cell [ref=f1e50]:
+                  - textbox "End Time 1" [ref=f1e51]
+                - cell [ref=f1e52]:
+                  - textbox "Notes 1" [ref=f1e53]:
+                    - /placeholder: ऐच्छिक
+                - cell [ref=f1e54]:
+                  - button "नोंद 1 काढा" [ref=f1e55] [cursor=pointer]: ×
+          - generic [ref=f1e56]:
+            - button "ओळ जोडा" [ref=f1e57] [cursor=pointer]:
+              - generic [aria-hidden] [ref=f1e58]: ＋
+              - text: ओळ जोडा
+            - button "वेळापत्रक जतन करा" [ref=f1e59] [cursor=pointer]:
+              - text: वेळापत्रक जतन करा
+              - generic [aria-hidden] [ref=f1e60]: →
+      - region [ref=f1e61]:
+        - generic [ref=f1e62]:
+          - generic [ref=f1e63]:
+            - generic [ref=f1e64]: "02"
+            - heading "तुमचे वेळापत्रक" [level=2] [ref=f1e65]
+          - button "पूर्ण झाले · 0" [ref=f1e66] [cursor=pointer]
+        - generic [ref=f1e67]:
+          - generic [ref=f1e68]: ✦
+          - strong [ref=f1e69]: तुमचा वेळापत्रक फलक तयार आहे
+          - generic [ref=f1e70]: डावीकडे ओळी भरा आणि वेळापत्रक जतन करा.
+    - paragraph [ref=f1e71]: वेळापत्रक या ब्राउझरमध्ये आपोआप जतन होते.
+  - contentinfo [ref=f1e72]:
+    - link "← आमच्याविषयी" [ref=f1e73] [cursor=pointer]:
+      - /url: "#top"
+    - link "दैनिक कार्यफलक" [ref=f1e74] [cursor=pointer]:
+      - /url: "#tasks"

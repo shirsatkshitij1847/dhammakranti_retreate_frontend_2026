@@ -1,0 +1,63 @@
+- generic [ref=f1e2]:
+  - banner [ref=f1e3]:
+    - link "Triratna Akola — मुख्यपृष्ठ" [ref=f1e4] [cursor=pointer]:
+      - /url: "#top"
+      - img "Triratna Akola — by the youth, for the youth" [ref=f1e5]
+      - generic [ref=f1e6]:
+        - strong [ref=f1e7]: त्रिरत्न बौद्ध महासंघ, अकोला
+        - generic [ref=f1e8]: TRIRATNA BUDDHIST COMMUNITY
+    - navigation "पृष्ठ नेव्हिगेशन" [ref=f1e9]:
+      - link "नोंदणी" [ref=f1e10] [cursor=pointer]:
+        - /url: "#registration"
+      - link "सहभागी" [ref=f1e11] [cursor=pointer]:
+        - /url: "#people"
+      - link "कार्य वेळापत्रक" [ref=f1e12] [cursor=pointer]:
+        - /url: "#tasks"
+      - link "आमच्याविषयी" [ref=f1e13] [cursor=pointer]:
+        - /url: "#top"
+  - main [ref=f1e14]:
+    - generic [ref=f1e15]:
+      - paragraph [ref=f1e16]: त्रिरत्न बौद्ध महासंघ · अकोला
+      - heading "धम्मक्रांती शिबिर नोंदणी" [level=1] [ref=f1e17]
+      - generic [ref=f1e18]: शिबिर निवडा आणि सहभागी होण्यासाठी खालील माहिती भरा.
+    - region [ref=f1e19]:
+      - generic [ref=f1e20]:
+        - generic [ref=f1e21]:
+          - text: REGISTRATION
+          - heading "सहभागी नोंदणी" [level=2] [ref=f1e22]
+        - button "＋ नवीन शिबिर" [ref=f1e23] [cursor=pointer]
+      - generic [ref=f1e24]:
+        - generic [ref=f1e25]:
+          - text: शिबिर निवडा
+          - combobox "शिबिर निवडा" [disabled] [ref=f1e26]:
+            - option "शिबिर उपलब्ध नाही" [disabled] [selected]
+        - generic [ref=f1e27]:
+          - text: नाव
+          - textbox "नाव" [ref=f1e28]
+        - generic [ref=f1e29]:
+          - text: आडनाव
+          - textbox "आडनाव" [ref=f1e30]
+        - generic [ref=f1e31]:
+          - text: मोबाईल नंबर
+          - textbox "मोबाईल नंबर" [ref=f1e32]
+        - generic [ref=f1e33]:
+          - text: ईमेल
+          - generic [ref=f1e34]: (ऐच्छिक)
+          - textbox "ईमेल (ऐच्छिक)" [ref=f1e35]
+        - generic [ref=f1e36]:
+          - text: केंद्र
+          - textbox "केंद्र" [ref=f1e37]
+        - generic [ref=f1e38]:
+          - text: केंद्र शुल्क / पेमेंट
+          - textbox "केंद्र शुल्क / पेमेंट" [ref=f1e39]
+        - generic [ref=f1e40]:
+          - text: पूर्ण पत्ता
+          - textbox "पूर्ण पत्ता" [ref=f1e41]
+        - generic [ref=f1e42]:
+          - paragraph [ref=f1e43]: तुमची माहिती निवडलेल्या शिबिराच्या नोंदणीसाठी वापरली जाईल.
+          - button "नोंदणी सबमिट करा" [disabled] [ref=f1e44]
+  - contentinfo [ref=f1e45]:
+    - link "← आमच्याविषयी" [ref=f1e46] [cursor=pointer]:
+      - /url: "#top"
+    - link "सहभागी यादी" [ref=f1e47] [cursor=pointer]:
+      - /url: "#people"

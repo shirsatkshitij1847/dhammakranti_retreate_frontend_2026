@@ -1,0 +1,41 @@
+- generic [ref=e2]:
+  - banner [ref=e36]:
+    - link "Triratna Akola — मुख्यपृष्ठ" [ref=e37] [cursor=pointer]:
+      - /url: "#top"
+      - img "Triratna Akola — by the youth, for the youth" [ref=e38]
+      - generic [ref=e39]:
+        - strong [ref=e40]: त्रिरत्न बौद्ध महासंघ, अकोला
+        - generic [ref=e41]: TRIRATNA BUDDHIST COMMUNITY
+    - navigation "पृष्ठ नेव्हिगेशन" [ref=e42]:
+      - link "Admin Login" [ref=e43] [cursor=pointer]:
+        - /url: "#organization"
+      - link "कार्य वेळापत्रक" [ref=e44] [cursor=pointer]:
+        - /url: "#tasks"
+      - link "आमच्याविषयी" [ref=e45] [cursor=pointer]:
+        - /url: "#top"
+  - main [ref=e69]:
+    - generic [ref=e70]:
+      - paragraph [ref=e71]: त्रिरत्न बौद्ध महासंघ · अकोला
+      - heading "संघटन व्यवस्थापन" [level=1] [ref=e72]
+      - generic [ref=e73]: Admin आणि Organizer खात्यांसाठी सुरक्षित प्रवेश.
+    - region [ref=e74]:
+      - generic [ref=e76]:
+        - generic [ref=e77]: ORGANIZER PORTAL
+        - heading "व्यवस्थापन लॉगिन" [level=2] [ref=e78]
+      - group "लॉगिन किंवा साइन अप" [ref=e79]:
+        - button "लॉगिन" [pressed] [ref=e80] [cursor=pointer]
+        - button "साइन अप" [ref=e81] [cursor=pointer]
+      - generic [ref=e82]:
+        - generic [ref=e83]:
+          - text: ईमेल
+          - textbox "ईमेल" [ref=e84]
+        - generic [ref=e85]:
+          - text: पासवर्ड
+          - textbox "पासवर्ड" [ref=e86]
+        - button "लॉगिन करा" [ref=e87] [cursor=pointer]
+      - paragraph [ref=e88]: "🔒सार्वजनिक साइन-अपने Visitor खाते तयार होते. Admin खाते फक्त server वरच्या `ADMIN_EMAIL` आणि `ADMIN_PASSWORD` मधून तयार करा. Admin नंतर खाते Organizer किंवा Admin म्हणून नेमू शकतो."
+  - contentinfo [ref=e66]:
+    - link "← आमच्याविषयी" [ref=e67] [cursor=pointer]:
+      - /url: "#top"
+    - link "Admin Login" [ref=e68] [cursor=pointer]:
+      - /url: "#organization"

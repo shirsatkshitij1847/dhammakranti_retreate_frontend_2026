@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animated Intro Page</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Noto Sans Devanagari', Arial, sans-serif;
+    background: black;
+    color: white;
+    overflow-x: hidden;
+}
+
+/* SECTION COMMON */
+.section {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+}
+
+/* FIRST SECTION */
+.container {
+    transition: opacity 0.8s ease;
+}
+
+.bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: zoom 8s infinite alternate ease-in-out;
+}
+
+@keyframes zoom {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.1); }
+}
+
+.info-box {
+    position: absolute;
+    top: 50%;
+    left: 8%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.15);
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: white;
+    max-width: 400px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.4);
+    font-family: 'Kalam', 'Noto Sans Devanagari', sans-serif;
+}
+
+.info-box h1 {
+    margin-top: 0;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.info-box p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.btn {
+    padding: 12px 25px;
+    border: 2px solid white;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    border-radius: 30px;
+    font-size: 16px;
+    transition: 0.3s;
+    margin-top: 20px;
+    font-family: 'Kalam', 'Noto Sans Devanagari', sans-serif;
+}
+
+.btn:hover {
+    background: white;
+    color: black;
+}
+
+/* FORM SECTION */
+.form-section {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    background: rgba(0,0,0,0.9);
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+iframe {
+    width: 80%;
+    height: 80%;
+    border-radius: 20px;
+    border: none;
+    background: white;
+}
+
+/* SECOND IMAGE */
+#secondImageContainer {
+    display: none;
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+#secondImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 110%;
+    height: 110%;
+    object-fit: cover;
+    animation: zoomPan 30s ease-in-out infinite alternate;
+    z-index: 1;
+}
+
+@keyframes zoomPan {
+    0% { transform: scale(1) translate(0,0); }
+    50% { transform: scale(1.05) translate(10px, 10px); }
+    100% { transform: scale(1) translate(0,0); }
+}
+
+.thank-you-box {
+    position: absolute;
+    top: 50%;
+    left: 8%;
+    transform: translateY(-50%);
+    background: rgba(255 255 255 / 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding: 40px;
+    border-radius: 20px;
+    color: white;
+    max-width: 400px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.4);
+    font-family: 'Kalam', 'Noto Sans Devanagari', sans-serif;
+    z-index: 2;
+}
+
+.thank-you-box h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.thank-you-box p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 768px) {
+
+    .info-box,
+    .thank-you-box {
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 85%;
+        padding: 25px;
+        text-align: center;
+    }
+
+    .info-box h1,
+    .thank-you-box h1 {
+        font-size: 26px;
+    }
+
+    .info-box p,
+    .thank-you-box p {
+        font-size: 16px;
+    }
+
+    iframe {
+        width: 95%;
+        height: 75%;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<!-- FIRST SECTION -->
+<div class="section container" id="introSection">
+    <img src="buddha1.jpg" class="bg-image" alt="Buddha Background Image">
+    <div class="info-box">
+        <h1>स्वागत है</h1>
+        <p>
+        जैसा कि आप जानते हैं, जीवन में धम्म के सिद्धांतों को अपनाना आसान नहीं होता।
+        हर किसी का अनुभव अलग होता है, और यही अनुभव हमें समझने और सीखने में मदद कर सकता है।
+        <br><br>
+        हम एक छोटे और सरल सर्वेक्षण कर रहे हैं।
+        <br><br>
+        ✅ सिर्फ ५-६ आसान सवाल<br>
+        ✅ कोई लॉगिन जरूरी नहीं<br>
+        ✅ केवल २-३ मिनट
+        </p>
+        <button class="btn" onclick="showForm()">फ़ॉर्म भरें</button>
+    </div>
+</div>
+
+<!-- FORM SECTION -->
+<div class="form-section" id="formSection">
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc9yL9lbRLFWxtD5wqE0mTSTk0M4nFi1D_41T59QrhWaMlYeA/viewform?embedded=true"></iframe>
+    <button class="btn" onclick="showSecondImage()" style="margin-top:20px;">मैंने जमा किया</button>
+</div>
+
+<!-- SECOND IMAGE -->
+<div id="secondImageContainer">
+    <img src="buddha2.jpg" id="secondImage" alt="Buddha Thank You Background">
+    <div class="thank-you-box">
+        <h1>धन्यवाद!</h1>
+        <p>आपका फॉर्म सफलतापूर्वक जमा हो गया है। हम शीघ्र ही आपसे संपर्क करेंगे।</p>
+    </div>
+</div>
+
+<script>
+function showForm() {
+    const intro = document.getElementById("introSection");
+    intro.style.opacity = "0";
+
+    setTimeout(() => {
+        intro.style.display = "none";
+        document.getElementById("formSection").style.display = "flex";
+    }, 800);
+}
+
+function showSecondImage() {
+    document.getElementById("formSection").style.display = "none";
+    document.getElementById("secondImageContainer").style.display = "block";
+}
+</script>
+
+</body>
+</html>

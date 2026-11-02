@@ -1,0 +1,95 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - link "Triratna Akola — मुख्यपृष्ठ" [ref=e4] [cursor=pointer]:
+      - /url: "#top"
+      - img "Triratna Akola — by the youth, for the youth" [ref=e5]
+      - generic [ref=e6]:
+        - strong [ref=e7]: त्रिरत्न बौद्ध महासंघ, अकोला
+        - generic [ref=e8]: TRIRATNA BUDDHIST COMMUNITY
+    - navigation "पृष्ठ नेव्हिगेशन" [ref=e9]:
+      - link "आमच्याविषयी" [ref=e10] [cursor=pointer]:
+        - /url: "#top"
+  - main [ref=e11]:
+    - generic [ref=e12]:
+      - paragraph [ref=e13]: त्रिरत्न बौद्ध महासंघ · अकोला
+      - heading "कार्य वेळापत्रक निर्माता" [level=1] [ref=e14]
+      - paragraph [ref=e15]: तुमचा दिवस नियोजित करा, वेळापत्रक जतन करा आणि पूर्ण झालेल्या नोंदी पाहा.
+    - group "वेळापत्रक दृश्य निवडा" [ref=e16]:
+      - generic [ref=e17]:
+        - button "फक्त Editor" [ref=e18] [cursor=pointer]
+        - button "फक्त Table" [ref=e19] [cursor=pointer]
+        - button "दोन्ही" [pressed] [ref=e20] [cursor=pointer]
+      - button "PDF डाउनलोड" [disabled] [ref=e21]
+    - generic [ref=e22]:
+      - region [ref=e23]:
+        - generic [ref=e24]:
+          - generic [ref=e25]:
+            - generic [ref=e26]: "01"
+            - heading "वेळापत्रक तयार करा" [level=2] [ref=e27]
+          - generic [ref=e28]: सोमवार, २ नोव्हेंबर, २०२६
+        - generic [ref=e29]:
+          - table [ref=e31]:
+            - rowgroup [ref=e32]:
+              - row [ref=e33]:
+                - columnheader "Sr. No." [ref=e34]
+                - columnheader "Activity" [ref=e35]
+                - columnheader "Date" [ref=e36]
+                - columnheader "Start Time" [ref=e37]
+                - columnheader "End Time" [ref=e38]
+                - columnheader "Notes" [ref=e39]
+                - columnheader "काढा" [ref=e40]
+            - rowgroup [ref=e41]:
+              - row [ref=e42]:
+                - cell "01" [ref=e43]
+                - cell [ref=e44]:
+                  - textbox "Activity 1" [ref=e45]:
+                    - /placeholder: कार्य
+                - cell [ref=e46]:
+                  - textbox "Date 1" [ref=e47]: 2026-11-02
+                - cell [ref=e48]:
+                  - textbox "Start Time 1" [ref=e49]
+                - cell [ref=e50]:
+                  - textbox "End Time 1" [ref=e51]
+                - cell [ref=e52]:
+                  - textbox "Notes 1" [ref=e53]:
+                    - /placeholder: ऐच्छिक
+                - cell [ref=e54]:
+                  - button "नोंद 1 काढा" [ref=e55] [cursor=pointer]: ×
+          - generic [ref=e56]:
+            - button "ओळ जोडा" [ref=e57] [cursor=pointer]:
+              - generic [aria-hidden] [ref=e58]: ＋
+              - text: ओळ जोडा
+            - button "वेळापत्रक जतन करा" [ref=e59] [cursor=pointer]:
+              - text: वेळापत्रक जतन करा
+              - generic [aria-hidden] [ref=e60]: →
+      - region [ref=e61]:
+        - generic [ref=e62]:
+          - generic [ref=e63]:
+            - generic [ref=e64]: "02"
+            - heading "तुमचे वेळापत्रक" [level=2] [ref=e65]
+          - button "पूर्ण झाले · 0" [ref=e66] [cursor=pointer]
+        - generic [ref=e67]:
+          - generic [ref=e68]: ✦
+          - strong [ref=e69]: तुमचा वेळापत्रक फलक तयार आहे
+          - generic [ref=e70]: डावीकडे ओळी भरा आणि वेळापत्रक जतन करा.
+    - paragraph [ref=e71]: वेळापत्रक या ब्राउझरमध्ये आपोआप जतन होते.
+    - generic [ref=e73]:
+      - generic [ref=e74]:
+        - heading [level=1] [ref=e75]: Triratna bauddha mahasang, Akola
+        - heading [level=2] [ref=e76]: Dhammakranti shibir 2026
+        - paragraph [ref=e77]: Activity Timetable
+      - table [ref=e78]:
+        - rowgroup [ref=e79]:
+          - row [ref=e80]:
+            - columnheader [ref=e81]: Sr. No.
+            - columnheader [ref=e82]: Activity
+            - columnheader [ref=e83]: Date
+            - columnheader [ref=e84]: Start Time
+            - columnheader [ref=e85]: End Time
+            - columnheader [ref=e86]: Notes
+      - generic [ref=e87]: Triratna Bauddha Mahasangh · Akola
+  - contentinfo [ref=e88]:
+    - link "← आमच्याविषयी" [ref=e89] [cursor=pointer]:
+      - /url: "#top"
+    - link "दैनिक कार्यफलक" [ref=e90] [cursor=pointer]:
+      - /url: "#tasks"

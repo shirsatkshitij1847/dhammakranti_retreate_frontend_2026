@@ -1,0 +1,55 @@
+- generic [ref=f2e2]:
+  - banner [ref=f2e3]:
+    - link "Triratna Akola — मुख्यपृष्ठ" [ref=f2e4] [cursor=pointer]:
+      - /url: "#top"
+      - img "Triratna Akola — by the youth, for the youth" [ref=f2e5]
+      - generic [ref=f2e6]:
+        - strong [ref=f2e7]: त्रिरत्न बौद्ध महासंघ, अकोला
+        - generic [ref=f2e8]: TRIRATNA BUDDHIST COMMUNITY
+    - navigation "पृष्ठ नेव्हिगेशन" [ref=f2e9]:
+      - link "नोंदणी" [ref=f2e10] [cursor=pointer]:
+        - /url: "#registration"
+      - link "सहभागी" [ref=f2e70] [cursor=pointer]:
+        - /url: "#people"
+      - link "व्यवस्थापन" [ref=f2e71] [cursor=pointer]:
+        - /url: "#organization"
+      - link "कार्य वेळापत्रक" [ref=f2e12] [cursor=pointer]:
+        - /url: "#tasks"
+      - link "आमच्याविषयी" [ref=f2e13] [cursor=pointer]:
+        - /url: "#top"
+  - main [ref=f2e117]:
+    - generic [ref=f2e118]:
+      - paragraph [ref=f2e119]: त्रिरत्न बौद्ध महासंघ · अकोला
+      - heading "संघटन व्यवस्थापन" [level=1] [ref=f2e120]
+      - generic [ref=f2e121]: Admin आणि Organizer खात्यांसाठी सुरक्षित प्रवेश.
+    - generic [ref=f2e122]:
+      - generic [ref=f2e123]:
+        - generic [ref=f2e124]: SIGNED IN · ADMIN
+        - heading "Admin" [level=2] [ref=f2e125]
+        - paragraph [ref=f2e126]: admin@example.com
+      - button "लॉग आउट" [ref=f2e127] [cursor=pointer]
+    - link "सहभागी यादी उघडा →" [ref=f2e129] [cursor=pointer]:
+      - /url: "#people"
+    - region [ref=f2e130]:
+      - generic [ref=f2e132]:
+        - text: RETREAT SETUP
+        - heading "नवीन शिबिर" [level=2] [ref=f2e133]
+      - generic [ref=f2e134]:
+        - generic [ref=f2e135]:
+          - text: शिबिराचे नाव
+          - textbox "शिबिराचे नाव" [ref=f2e136]
+        - generic [ref=f2e137]:
+          - text: वर्ष
+          - spinbutton "वर्ष" [ref=f2e138]: "2026"
+        - button "शिबिर तयार करा" [ref=f2e139] [cursor=pointer]
+    - region [ref=f2e140]:
+      - generic [ref=f2e142]:
+        - text: ACCOUNT ACCESS
+        - heading "खाते आणि भूमिका" [level=2] [ref=f2e143]
+      - paragraph [ref=f2e144]: नवीन साइन-अप Visitor म्हणून येतात. Retreat, सहभागी यादी आणि भूमिका व्यवस्थापनासाठी Admin आवश्यक आहे.
+      - paragraph [ref=f2e145]: खाती लोड होत आहेत…
+  - contentinfo [ref=f2e33]:
+    - link "← आमच्याविषयी" [ref=f2e34] [cursor=pointer]:
+      - /url: "#top"
+    - link "सहभागी यादी" [ref=f2e146] [cursor=pointer]:
+      - /url: "#people"

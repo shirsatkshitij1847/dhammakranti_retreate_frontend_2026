@@ -1,0 +1,104 @@
+- generic [ref=f1e2]:
+  - banner [ref=f1e3]:
+    - link "Triratna Akola — मुख्यपृष्ठ" [ref=f1e4] [cursor=pointer]:
+      - /url: "#top"
+      - img "Triratna Akola — by the youth, for the youth" [ref=f1e5]
+      - generic [ref=f1e6]:
+        - strong [ref=f1e7]: त्रिरत्न बौद्ध महासंघ, अकोला
+        - generic [ref=f1e8]: TRIRATNA BUDDHIST COMMUNITY
+    - navigation "पृष्ठ नेव्हिगेशन" [ref=f1e9]:
+      - link "Admin Login" [ref=f1e10] [cursor=pointer]:
+        - /url: "#organization"
+      - link "कार्य वेळापत्रक" [ref=f1e11] [cursor=pointer]:
+        - /url: "#tasks"
+      - link "आमच्याविषयी" [ref=f1e12] [cursor=pointer]:
+        - /url: "#about"
+  - main [ref=f1e13]:
+    - region [ref=f1e14]:
+      - generic [ref=f1e15]:
+        - paragraph [ref=f1e16]: त्रिरत्न बौद्ध महासंघ · अकोला
+        - heading "आठवणींचे धम्म-अल्बम" [level=1] [ref=f1e17]:
+          - text: आठवणींचे
+          - generic [ref=f1e18]: धम्म-अल्बम
+        - paragraph [ref=f1e19]: मैत्री, धम्म आणि एकत्रित प्रवासाच्या काही सुंदर क्षणांतून…
+        - generic "त्रिरत्न अकोला कार्यक्रमांची छायाचित्रे" [ref=f1e20]:
+          - generic [aria-hidden] [ref=f1e21]: OUR MOMENTS
+          - generic [ref=f1e23]:
+            - generic [ref=f1e24]:
+              - figure "धम्ममित्रांच्या आठवणी · 01" [ref=f1e25]:
+                - img "त्रिरत्न अकोला कार्यक्रमाचे छायाचित्र 01" [ref=f1e26]
+                - generic [ref=f1e27]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e28]: · 01
+              - figure "धम्ममित्रांच्या आठवणी · 02" [ref=f1e29]:
+                - img "त्रिरत्न अकोला कार्यक्रमाचे छायाचित्र 02" [ref=f1e30]
+                - generic [ref=f1e31]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e32]: · 02
+              - figure "धम्ममित्रांच्या आठवणी · 03" [ref=f1e33]:
+                - img "त्रिरत्न अकोला कार्यक्रमाचे छायाचित्र 03" [ref=f1e34]
+                - generic [ref=f1e35]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e36]: · 03
+              - figure "धम्ममित्रांच्या आठवणी · 04" [ref=f1e37]:
+                - img "त्रिरत्न अकोला कार्यक्रमाचे छायाचित्र 04" [ref=f1e38]
+                - generic [ref=f1e39]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e40]: · 04
+              - figure "धम्ममित्रांच्या आठवणी · 05" [ref=f1e41]:
+                - img "त्रिरत्न अकोला कार्यक्रमाचे छायाचित्र 05" [ref=f1e42]
+                - generic [ref=f1e43]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e44]: · 05
+              - figure "धम्ममित्रांच्या आठवणी · 06" [ref=f1e45]:
+                - img "त्रिरत्न अकोला कार्यक्रमाचे छायाचित्र 06" [ref=f1e46]
+                - generic [ref=f1e47]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e48]: · 06
+              - figure "धम्ममित्रांच्या आठवणी · 07" [ref=f1e49]:
+                - img "त्रिरत्न अकोला कार्यक्रमाचे छायाचित्र 07" [ref=f1e50]
+                - generic [ref=f1e51]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e52]: · 07
+            - generic [aria-hidden] [ref=f1e53]:
+              - figure [ref=f1e54]:
+                - generic [ref=f1e55]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e56]: · 01
+              - figure [ref=f1e57]:
+                - generic [ref=f1e58]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e59]: · 02
+              - figure [ref=f1e60]:
+                - generic [ref=f1e61]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e62]: · 03
+              - figure [ref=f1e63]:
+                - generic [ref=f1e64]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e65]: · 04
+              - figure [ref=f1e66]:
+                - generic [ref=f1e67]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e68]: · 05
+              - figure [ref=f1e69]:
+                - generic [ref=f1e70]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e71]: · 06
+              - figure [ref=f1e72]:
+                - generic [ref=f1e73]:
+                  - text: धम्ममित्रांच्या आठवणी
+                  - generic [ref=f1e74]: · 07
+          - generic [ref=f1e75]:
+            - generic [ref=f1e76]: मित्रता · प्रज्ञा · करुणा
+            - generic [aria-hidden] [ref=f1e77]: ❋
+        - link "आमच्याविषयी वाचा" [ref=f1e78] [cursor=pointer]:
+          - /url: "#about"
+          - text: आमच्याविषयी वाचा
+          - generic [aria-hidden] [ref=f1e79]: ↓
+      - generic [ref=f1e82]: शांती · मैत्री · प्रज्ञा
+  - contentinfo [ref=f1e83]:
+    - link "त्रिरत्न बौद्ध महासंघ, अकोला" [ref=f1e84] [cursor=pointer]:
+      - /url: "#top"
+    - link "आमच्याविषयी" [ref=f1e85] [cursor=pointer]:
+      - /url: "#about"

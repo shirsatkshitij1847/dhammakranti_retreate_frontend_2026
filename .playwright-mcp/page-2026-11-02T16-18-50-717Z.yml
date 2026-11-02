@@ -1,0 +1,37 @@
+- generic [ref=f2e2]:
+  - banner [ref=f2e3]:
+    - link "Triratna Akola — मुख्यपृष्ठ" [ref=f2e4] [cursor=pointer]:
+      - /url: "#top"
+      - img "Triratna Akola — by the youth, for the youth" [ref=f2e5]
+      - generic [ref=f2e6]:
+        - strong [ref=f2e7]: त्रिरत्न बौद्ध महासंघ, अकोला
+        - generic [ref=f2e8]: TRIRATNA BUDDHIST COMMUNITY
+    - navigation "पृष्ठ नेव्हिगेशन" [ref=f2e9]:
+      - link "नोंदणी" [ref=f2e10] [cursor=pointer]:
+        - /url: "#registration"
+      - link "सहभागी" [ref=f2e70] [cursor=pointer]:
+        - /url: "#people"
+      - link "व्यवस्थापन" [ref=f2e71] [cursor=pointer]:
+        - /url: "#organization"
+      - link "कार्य वेळापत्रक" [ref=f2e12] [cursor=pointer]:
+        - /url: "#tasks"
+      - link "आमच्याविषयी" [ref=f2e13] [cursor=pointer]:
+        - /url: "#top"
+  - main [ref=f2e104]:
+    - generic [ref=f2e105]:
+      - paragraph [ref=f2e106]: त्रिरत्न बौद्ध महासंघ · अकोला
+      - heading "शिबिर सहभागी" [level=1] [ref=f2e107]
+      - generic [ref=f2e108]: नोंदणीकृत सहभागी आणि त्यांची शिबिर माहिती.
+    - region [ref=f2e109]:
+      - generic [ref=f2e111]:
+        - text: ADMIN ONLY
+        - heading "सहभागी यादी · 0" [level=2] [ref=f2e112]:
+          - text: सहभागी यादी
+          - generic [ref=f2e113]: · 0
+      - paragraph [ref=f2e114]: सहभागींची वैयक्तिक माहिती फक्त अधिकृत Admin वापरासाठी आहे.
+      - paragraph [ref=f2e115]: अजून कोणतीही नोंदणी उपलब्ध नाही.
+  - contentinfo [ref=f2e33]:
+    - link "← आमच्याविषयी" [ref=f2e34] [cursor=pointer]:
+      - /url: "#top"
+    - link "व्यवस्थापन" [ref=f2e116] [cursor=pointer]:
+      - /url: "#organization"
