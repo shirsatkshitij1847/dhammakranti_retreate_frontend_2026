@@ -34,6 +34,8 @@ Login sessions use `sessionStorage` and the API's one-hour bearer token. The fro
 
 ## Other pages
 
+On each fresh launch/reload from November 3 through November 7, 2026 (India time), the retreat banner appears for 10 seconds before the app opens. Visitors can choose “Continue to app” to skip it. The campaign automatically expires at midnight on November 8; internal navigation does not replay it.
+
 - `#blogs` is visible and accessible in the UI only after login and lists posts with pagination. Signed-in organizers/admins can publish a title, plain text, and one JPEG/PNG/WebP image up to 5 MB. Organizers can edit/delete their own posts; admins can manage all posts. The backend read/image endpoints remain public; the UI login gate does not make posts private. Blog APIs require working backend/MongoDB connectivity; errors are displayed with a retry option.
 
 - `#top` is the home page, with a static forest/stupa background, continuously downward-scrolling frameless photos from `photos/` with blurred/fading edges, and stationary standing Buddha artwork with a golden halo. Hover or focus the photo stream to pause; reduced-motion preferences disable its animation.
