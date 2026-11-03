@@ -10,6 +10,25 @@
     linear-gradient(135deg, #123f50, #0d2f43 52%, #174853);
 }
 
+.people-retreat-filter {
+  display: grid;
+  gap: 8px;
+  max-width: 420px;
+  margin-bottom: 20px;
+  color: #fff1bd;
+  font-size: 14px;
+}
+
+.people-retreat-filter select {
+  width: 100%;
+  padding: 12px;
+  color: #fff;
+  background: #102b30;
+  border: 1px solid #c6a75e;
+  border-radius: 8px;
+  font: inherit;
+}
+
 .retreat-page-heading,
 .retreat-card {
   width: min(1050px, 100%);
@@ -178,7 +197,8 @@
   transform: translateY(-1px);
 }
 
-.retreat-primary-button:disabled {
+.retreat-primary-button:disabled,
+.retreat-secondary-button:disabled {
   cursor: not-allowed;
   opacity: 0.58;
   transform: none;
@@ -593,6 +613,7 @@
 
 .retreat-admin-list li {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
@@ -604,6 +625,9 @@
 
 .retreat-admin-list li > span {
   display: grid;
+  flex: 1 1 220px;
+  min-width: 0;
+  overflow-wrap: anywhere;
   gap: 3px;
   color: #fff;
   font-size: 12px;
@@ -665,6 +689,7 @@
 
 .waiting-approval-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
@@ -672,6 +697,12 @@
   background: rgba(202, 232, 224, 0.07);
   border: 1px solid rgba(211, 239, 232, 0.16);
   border-radius: 11px;
+}
+
+.waiting-approval-row .account-identity {
+  flex: 1 1 200px;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .waiting-approval-row .retreat-primary-button {
@@ -1055,6 +1086,10 @@
   .retreat-admin-list li {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .retreat-admin-list li > span {
+    flex-basis: auto;
   }
 
   .retreat-admin-list li .people-delete-button {

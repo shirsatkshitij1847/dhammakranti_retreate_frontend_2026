@@ -13,6 +13,7 @@ function BlogPage({ account, token, authLoading }) {
   const [notice, setNotice] = useState('')
   const [busy, setBusy] = useState(false)
   const [editing, setEditing] = useState(null)
+  const [detailId, setDetailId] = useState(null)
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
   const fileRef = useRef(null)
@@ -87,6 +88,7 @@ function BlogPage({ account, token, authLoading }) {
         body: data,
       }, token)
       setNotice(editing ? 'Post updated.' : 'Post published and publicly visible.')
+      setDetailId(null)
       resetForm()
       setLoading(true)
       if (page !== 1) setPage(1)
@@ -105,6 +107,7 @@ function BlogPage({ account, token, authLoading }) {
     setNotice('')
     try {
       await requestApi(`/api/blogs/${encodeURIComponent(blog._id)}`, { method: 'DELETE' }, token)
+      if (detailId === blog._id) setDetailId(null)
       setLoading(true)
       if (blogs.length === 1 && page > 1) setPage(page - 1)
       else await loadBlogs()
@@ -120,10 +123,9 @@ function BlogPage({ account, token, authLoading }) {
   return (
     <main className="blog-page">
       <header className="blog-heading">
-        <p>TRIRATNA AKOLA</p>
-        <h1>ब्लॉग · Community stories</h1>
+        <h1>News &amp; Stories</h1>
       </header>
-      {authLoading ? <p role="status">Checking your account…</p> : canPublish ? (
+      {!authLoading && canPublish && (
         <form className="blog-editor" ref={formRef} onSubmit={publish}>
           <h2>{editing ? 'Edit post' : 'Create a post'}</h2>
           <p>Published posts are visible to everyone.</p>
@@ -144,17 +146,34 @@ function BlogPage({ account, token, authLoading }) {
             </div>
           </fieldset>
         </form>
-      ) : <p>{account ? 'Waiting for admin approval. Only organizers and admins can publish.' : <a href="#organization">Log in to publish as an organizer or admin.</a>}</p>}
+      )}
       {error && <div className="blog-error" role="alert">{error} <button type="button" disabled={busy || loading} onClick={() => { setLoading(true); loadBlogs() }}>Retry loading posts</button></div>}
       {notice && <p role="status">{notice}</p>}
       {loading ? <p role="status">Loading posts…</p> : (
-        <section className="blog-posts" aria-label="Blog posts" aria-busy={busy}>
+        <section className={`blog-posts ${detailId ? 'blog-reading-view' : 'blog-story-grid'}`} aria-label="News and stories" aria-busy={busy}>
+          {detailId && <button type="button" onClick={() => setDetailId(null)}>Back to all stories</button>}
           {!blogs.length && !error && <p>No posts on this page yet.</p>}
-          {blogs.map((blog) => (
-            <article className="blog-post" key={blog._id}>
-              <h2>{blog.title}</h2>
+          {blogs.filter((blog) => !detailId || blog._id === detailId).map((blog) => (
+            <article className={`blog-post${detailId ? ' blog-post-expanded' : ''}`} key={`${blog._id}-${Boolean(detailId)}`}>
+              <p className="story-kicker">{detailId ? 'TRIRATNA AKOLA · COMMUNITY JOURNAL' : 'FROM OUR COMMUNITY'}</p>
+              <h2 tabIndex={-1} ref={(heading) => {
+                if (heading && detailId) heading.focus({ preventScroll: true })
+              }}>{blog.title}</h2>
+              <div className="story-meta">
+                <span>News &amp; Stories</span>
+                <span>{Math.max(1, Math.ceil(blog.text.trim().split(/\s+/).length / 200))} min read</span>
+                {blog.createdAt && <time dateTime={blog.createdAt}>{new Date(blog.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })}</time>}
+              </div>
               <img src={new URL(blog.imageUrl, `${API_BASE_URL}/`).href + `?v=${encodeURIComponent(blog.updatedAt || '')}`} alt={blog.title} loading="lazy" />
-              <p className="blog-text">{blog.text}</p>
+              <p className="blog-text">{detailId ? blog.text : `${blog.text.slice(0, 240)}${blog.text.length > 240 ? '…' : ''}`}</p>
+              {!detailId && <button
+                type="button"
+                aria-label={`View more: ${blog.title}`}
+                onClick={(event) => {
+                  setDetailId(blog._id)
+                  event.currentTarget.closest('section').scrollIntoView({ block: 'start' })
+                }}
+              >View more <span aria-hidden="true">→</span></button>}
               {canManage(blog) && <div className="blog-actions">
                 <button type="button" disabled={busy} onClick={() => {
                   setEditing(blog)
@@ -169,11 +188,11 @@ function BlogPage({ account, token, authLoading }) {
           ))}
         </section>
       )}
-      <nav className="blog-pagination" aria-label="Blog pagination">
+      {!detailId && <nav className="blog-pagination" aria-label="News and stories pagination">
         <button type="button" disabled={page === 1 || loading || busy} onClick={() => { setLoading(true); setPage(page - 1) }}>Previous</button>
         <span>Page {page}</span>
         <button type="button" disabled={blogs.length < PAGE_SIZE || loading || busy} onClick={() => { setLoading(true); setPage(page + 1) }}>Next</button>
-      </nav>
+      </nav>}
     </main>
   )
 }

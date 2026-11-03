@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import PdfReport from './PdfReport'
+import { downloadReport } from './downloadReport'
 import { requestApi } from './retreatApi'
 import './RetreatPortal.css'
 
@@ -62,12 +64,13 @@ function RegistrationPage({ token, onLogout, onRefreshAccount }) {
     setRegistrationMessage('')
     setSubmitting(true)
     try {
-      await requestApi(`/api/retreats/${encodeURIComponent(selectedRetreatId)}/registrations`, {
+      const result = await requestApi(`/api/retreats/${encodeURIComponent(selectedRetreatId)}/registrations`, {
         method: 'POST',
         body: JSON.stringify(registration),
       }, token)
       setRegistration({ ...EMPTY_REGISTRATION })
       setRegistrationMessage('नोंदणी यशस्वी झाली. धन्यवाद!')
+      if (result.emailNotification?.status === 'failed') setRegistrationError(result.emailNotification.message)
     } catch (error) {
       if (error.status === 401) {
         onLogout()
@@ -309,6 +312,7 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
   const [loading, setLoading] = useState(true)
   const [savingId, setSavingId] = useState('')
   const [approvingId, setApprovingId] = useState('')
+  const [deletingAccountId, setDeletingAccountId] = useState('')
   const [resettingId, setResettingId] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [passwordBusy, setPasswordBusy] = useState(false)
@@ -339,6 +343,29 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
       })
     return () => controller.abort()
   }, [token, onLogout])
+
+  const deleteSignup = async (target) => {
+    if (!window.confirm(`Delete the pending signup for ${target.name} (${target.email})? This permanently deletes their login account. Retreat participant records will not be deleted.`)) return
+    setError('')
+    setMessage('')
+    setDeletingAccountId(target._id)
+    try {
+      await requestApi(`/api/accounts/waiting/${encodeURIComponent(target._id)}`, { method: 'DELETE' }, token)
+      setWaitingAccounts((current) => current.filter((entry) => entry._id !== target._id))
+      setAccounts((current) => current.filter((entry) => entry._id !== target._id))
+      if (resettingId === target._id) {
+        setResettingId('')
+        setNewPassword('')
+      }
+      setMessage(`${target.name} यांची प्रलंबित साइन-अप विनंती हटवली.`)
+      onAccountsChanged()
+    } catch (requestError) {
+      if (requestError.status === 401) onLogout()
+      else setError(requestError.message)
+    } finally {
+      setDeletingAccountId('')
+    }
+  }
 
   const approveOrganizer = async (target) => {
     setError('')
@@ -437,10 +464,18 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
                 <button
                   type="button"
                   className="retreat-primary-button"
-                  disabled={approvingId === entry._id || savingId === entry._id}
+                  disabled={Boolean(deletingAccountId) || approvingId === entry._id || savingId === entry._id || passwordBusy}
                   onClick={() => approveOrganizer(entry)}
                 >
                   {approvingId === entry._id ? 'मंजुरी देत आहे…' : 'Organizer मंजूर करा'}
+                </button>
+                <button
+                  type="button"
+                  className="people-delete-button"
+                  disabled={Boolean(deletingAccountId) || Boolean(approvingId) || Boolean(savingId) || passwordBusy}
+                  onClick={() => deleteSignup(entry)}
+                >
+                  {deletingAccountId === entry._id ? 'हटवत आहे…' : 'विनंती हटवा / Delete request'}
                 </button>
               </div>
             ))}
@@ -463,7 +498,7 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
               <select
                 aria-label={`${entry.name} role`}
                 value={roles[entry._id]}
-                disabled={entry._id === account._id || savingId === entry._id || approvingId === entry._id}
+                disabled={Boolean(deletingAccountId) || entry._id === account._id || savingId === entry._id || approvingId === entry._id}
                 onChange={(event) => setRoles((current) => ({ ...current, [entry._id]: event.target.value }))}
               >
                 {Object.entries(ROLE_LABELS).map(([role, label]) => <option value={role} key={role}>{label}</option>)}
@@ -471,7 +506,7 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
               <button
                 type="button"
                 className="retreat-secondary-button"
-                disabled={entry._id === account._id || roles[entry._id] === entry.role || savingId === entry._id || approvingId === entry._id}
+                disabled={Boolean(deletingAccountId) || entry._id === account._id || roles[entry._id] === entry.role || savingId === entry._id || approvingId === entry._id}
                 onClick={() => updateRole(entry)}
               >
                 {savingId === entry._id ? 'जतन…' : 'भूमिका जतन करा'}
@@ -479,6 +514,7 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
               <button
                 type="button"
                 className="account-password-toggle"
+                disabled={Boolean(deletingAccountId)}
                 aria-expanded={resettingId === entry._id}
                 onClick={() => {
                   setResettingId((current) => current === entry._id ? '' : entry._id)
@@ -502,7 +538,7 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
                     />
                     <small>किमान ८ अक्षरे; बदलानंतर खाते पुन्हा लॉगिन करेल.</small>
                   </label>
-                  <button type="submit" className="retreat-primary-button" disabled={passwordBusy}>
+                  <button type="submit" className="retreat-primary-button" disabled={passwordBusy || Boolean(deletingAccountId)}>
                     {passwordBusy ? 'बदलत आहे…' : 'पासवर्ड जतन करा'}
                   </button>
                 </form>
@@ -524,6 +560,10 @@ function CreateRetreat({ token, onLogout, onRefreshAccount }) {
   const [listError, setListError] = useState('')
   const [name, setName] = useState('')
   const [year, setYear] = useState(String(new Date().getFullYear()))
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [venue, setVenue] = useState('')
+  const [editingId, setEditingId] = useState('')
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -557,15 +597,19 @@ function CreateRetreat({ token, onLogout, onRefreshAccount }) {
     setMessage('')
     setSubmitting(true)
     try {
-      const retreat = await requestApi('/api/retreats', {
-        method: 'POST',
-        body: JSON.stringify({ name, year: Number(year) }),
+      const retreat = await requestApi(editingId ? `/api/retreats/${encodeURIComponent(editingId)}` : '/api/retreats', {
+        method: editingId ? 'PATCH' : 'POST',
+        body: JSON.stringify({ name, year: Number(year), startDate, endDate, venue }),
       }, token)
       setName('')
-      setRetreats((current) => [...current, retreat].sort((first, second) => (
+      setStartDate('')
+      setEndDate('')
+      setVenue('')
+      setEditingId('')
+      setRetreats((current) => [...current.filter((entry) => entry._id !== retreat._id), retreat].sort((first, second) => (
         second.year - first.year || first.name.localeCompare(second.name)
       )))
-      setMessage(`${retreat.name} · ${retreat.year} शिबिर तयार झाले.`)
+      setMessage(`${retreat.name} · ${retreat.year} ${editingId ? 'शिबिर अद्ययावत झाले.' : 'शिबिर तयार झाले.'}`)
     } catch (requestError) {
       if (requestError.status === 401) onLogout()
       else {
@@ -607,7 +651,7 @@ function CreateRetreat({ token, onLogout, onRefreshAccount }) {
       <div className="retreat-card-heading">
         <div>
           <span className="retreat-card-kicker">RETREAT SETUP</span>
-          <h2 id="create-retreat-title">नवीन शिबिर</h2>
+          <h2 id="create-retreat-title">{editingId ? 'शिबिर अद्ययावत करा' : 'नवीन शिबिर'}</h2>
         </div>
       </div>
       <form className="retreat-create-form" onSubmit={submit}>
@@ -619,9 +663,29 @@ function CreateRetreat({ token, onLogout, onRefreshAccount }) {
           वर्ष
           <input required type="number" min="2000" step="1" value={year} onChange={(event) => setYear(event.target.value)} />
         </label>
-        <button type="submit" className="retreat-primary-button" disabled={submitting}>
-          {submitting ? 'जतन होत आहे…' : 'शिबिर तयार करा'}
+        <label>
+          सुरुवात / Start date
+          <input required type="date" value={startDate} onChange={(event) => setStartDate(event.target.value)} />
+        </label>
+        <label>
+          समाप्ती / End date
+          <input required type="date" min={startDate || undefined} value={endDate} onChange={(event) => setEndDate(event.target.value)} />
+        </label>
+        <label>
+          ठिकाण / Venue
+          <input required value={venue} onChange={(event) => setVenue(event.target.value)} maxLength={300} />
+        </label>
+        <button type="submit" className="retreat-primary-button" disabled={submitting || Boolean(deletingId)}>
+          {submitting ? 'जतन होत आहे…' : editingId ? 'बदल जतन करा' : 'शिबिर तयार करा'}
         </button>
+        {editingId && <button type="button" className="retreat-secondary-button" disabled={submitting} onClick={() => {
+          setEditingId('')
+          setName('')
+          setStartDate('')
+          setEndDate('')
+          setVenue('')
+          setError('')
+        }}>रद्द करा / Cancel</button>}
       </form>
       {error && <p className="retreat-feedback is-error" role="alert">{error}</p>}
       {message && <p className="retreat-feedback is-success" role="status">{message}</p>}
@@ -634,11 +698,22 @@ function CreateRetreat({ token, onLogout, onRefreshAccount }) {
           <ul>
             {retreats.map((retreat) => (
               <li key={retreat._id}>
-                <span><strong>{retreat.name}</strong><small>{retreat.year}</small></span>
+                <span><strong>{retreat.name}</strong><small>{retreat.year} · {retreat.startDate && retreat.endDate ? `${retreat.startDate} – ${retreat.endDate}` : 'Dates not set'} · {retreat.venue || 'Venue not set'}</small></span>
+                <button type="button" className="retreat-secondary-button" disabled={submitting || Boolean(deletingId)} onClick={() => {
+                  setEditingId(retreat._id)
+                  setName(retreat.name)
+                  setYear(String(retreat.year))
+                  setStartDate(retreat.startDate || '')
+                  setEndDate(retreat.endDate || '')
+                  setVenue(retreat.venue || '')
+                  setError('')
+                  setMessage('')
+                  document.getElementById('create-retreat-title')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                }}>तपशील बदला / Edit</button>
                 <button
                   type="button"
                   className="people-delete-button"
-                  disabled={deletingId === retreat._id}
+                  disabled={submitting || Boolean(deletingId) || editingId === retreat._id}
                   onClick={() => deleteRetreat(retreat)}
                 >
                   {deletingId === retreat._id ? 'हटवत आहे…' : 'शिबिर व नोंदणी हटवा'}
@@ -797,7 +872,11 @@ function OrganizationPage({ account, token, authLoading, onAuthenticated, onLogo
 }
 
 function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount }) {
+  const reportRef = useRef(null)
+  const [pdfBusy, setPdfBusy] = useState(false)
   const [people, setPeople] = useState([])
+  const [retreats, setRetreats] = useState([])
+  const [retreatFilter, setRetreatFilter] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [deletingId, setDeletingId] = useState('')
@@ -806,10 +885,14 @@ function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount })
     if (!token || !['admin', 'organizer'].includes(account?.role)) return undefined
 
     const controller = new AbortController()
-    requestApi('/api/users', { signal: controller.signal }, token)
-      .then((data) => {
-        if (!Array.isArray(data)) throw new Error('People list response is not valid.')
+    Promise.all([
+      requestApi('/api/users', { signal: controller.signal }, token),
+      requestApi('/api/retreats', { signal: controller.signal }, token),
+    ])
+      .then(([data, retreatData]) => {
+        if (!Array.isArray(data) || !Array.isArray(retreatData)) throw new Error('Participant or retreat list response is not valid.')
         setPeople(data)
+        setRetreats(retreatData)
       })
       .catch((requestError) => {
         if (requestError.name === 'AbortError') return
@@ -826,6 +909,32 @@ function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount })
       })
     return () => controller.abort()
   }, [account?.role, onLogout, onRefreshAccount, token])
+
+  const visiblePeople = people.filter((person) => !retreatFilter || (
+    retreatFilter === 'unassigned'
+      ? !person.retreatId
+      : person.retreatId?._id === retreatFilter
+  ))
+  const selectedRetreat = retreats.find((retreat) => retreat._id === retreatFilter)
+  const reportSubtitle = selectedRetreat
+    ? `${selectedRetreat.name} · ${selectedRetreat.year}`
+    : retreatFilter === 'unassigned' ? 'Retreat unavailable' : 'All retreats'
+
+  const downloadPeople = async () => {
+    setPdfBusy(true)
+    setError('')
+    try {
+      await downloadReport(reportRef.current, {
+        title: 'Retreat Participant Register',
+        filename: `triratna-akola-retreat-participants${retreatFilter ? `-${retreatFilter}` : ''}.pdf`,
+      })
+    } catch (failure) {
+      console.error('Unable to generate participant PDF.', failure)
+      setError('PDF डाउनलोड करता आले नाही. कृपया पुन्हा प्रयत्न करा.')
+    } finally {
+      setPdfBusy(false)
+    }
+  }
 
   const deletePerson = async (person) => {
     const name = `${person.name} ${person.middleName || ''} ${person.surname}`.replace(/\s+/g, ' ').trim()
@@ -875,21 +984,32 @@ function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount })
           <div className="retreat-card-heading">
             <div>
               <span className="retreat-card-kicker">ORGANIZER / ADMIN</span>
-              <h2 id="people-title">सहभागी यादी <span>· {people.length}</span></h2>
+              <h2 id="people-title">सहभागी यादी <span>· {visiblePeople.length}</span></h2>
             </div>
+            <button type="button" className="retreat-primary-button" disabled={loading || !visiblePeople.length || pdfBusy || Boolean(deletingId)} onClick={downloadPeople}>
+              {pdfBusy ? 'PDF तयार होत आहे…' : 'PDF डाउनलोड'}
+            </button>
           </div>
+          <label className="people-retreat-filter">
+            शिबिर निवडा / Select retreat
+            <select value={retreatFilter} disabled={loading || pdfBusy || Boolean(deletingId)} onChange={(event) => setRetreatFilter(event.target.value)}>
+              <option value="">All retreats / सर्व शिबिरे</option>
+              {retreats.map((retreat) => <option key={retreat._id} value={retreat._id}>{retreat.name} · {retreat.year}</option>)}
+              {people.some((person) => !person.retreatId) && <option value="unassigned">Retreat unavailable</option>}
+            </select>
+          </label>
           <p className="people-privacy-note">सहभागींची वैयक्तिक माहिती फक्त अधिकृत Organizer आणि Admin वापरासाठी आहे.</p>
           {error && <p className="retreat-feedback is-error" role="alert">{error}</p>}
           {loading ? (
             <p className="people-empty">सहभागी यादी लोड होत आहे…</p>
-          ) : people.length ? (
+          ) : visiblePeople.length ? (
             <div className="people-table-scroll">
               <table className="people-table">
                 <thead>
                   <tr><th>नाव</th><th>भूमिका</th><th>शिबिर</th><th>मोबाईल</th><th>ईमेल</th><th>केंद्र</th><th>पेमेंट</th><th>पत्ता</th>{account.role === 'admin' && <th>कृती</th>}</tr>
                 </thead>
                 <tbody>
-                  {people.map((person) => (
+                  {visiblePeople.map((person) => (
                     <tr key={person._id}>
                       <td>{`${person.name} ${person.middleName || ''} ${person.surname}`.replace(/\s+/g, ' ').trim()}</td>
                       <td>{ROLE_LABELS[person.role] || person.role || 'Visitor'}</td>
@@ -899,7 +1019,7 @@ function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount })
                       <td>{person.center || '—'}</td>
                       <td>{person.centerPayment || '—'}</td>
                       <td>{person.address}</td>
-                      {account.role === 'admin' && <td><button type="button" className="people-delete-button" disabled={deletingId === person._id} onClick={() => deletePerson(person)}>{deletingId === person._id ? 'हटवत आहे…' : 'हटवा'}</button></td>}
+                      {account.role === 'admin' && <td><button type="button" className="people-delete-button" disabled={pdfBusy || Boolean(deletingId)} onClick={() => deletePerson(person)}>{deletingId === person._id ? 'हटवत आहे…' : 'हटवा'}</button></td>}
                     </tr>
                   ))}
                 </tbody>
@@ -908,6 +1028,21 @@ function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount })
           ) : (
             <p className="people-empty">{error ? 'सहभागी यादी मिळाली नाही.' : 'अजून कोणतीही नोंदणी उपलब्ध नाही.'}</p>
           )}
+          <PdfReport
+            reportRef={reportRef}
+            title="Retreat Participant Register"
+            subtitle={reportSubtitle}
+            confidential
+            rowsPerPage={4}
+            columns={['Name / Role', 'Retreat', 'Mobile / Email', 'Center / Payment', 'Address']}
+            rows={visiblePeople.map((person) => [
+              `${[person.name, person.middleName, person.surname].filter(Boolean).join(' ')}\n${ROLE_LABELS[person.role] || person.role || 'Visitor'}`,
+              person.retreatId ? `${person.retreatId.name} · ${person.retreatId.year}` : '—',
+              `${person.mobileNumber}\n${person.email || '—'}`,
+              `${person.center || '—'}\nPayment: ${person.centerPayment || '—'}`,
+              person.address,
+            ])}
+          />
         </section>
       )}
     </main>

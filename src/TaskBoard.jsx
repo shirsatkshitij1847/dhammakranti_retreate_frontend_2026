@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './TaskBoard.css'
+import PdfReport from './PdfReport'
+import { downloadReport } from './downloadReport'
 
 const STORAGE_KEY = 'triratna-akola-timetable'
 const INDIA_TIME_ZONE = 'Asia/Kolkata'
@@ -273,67 +275,10 @@ function TaskBoard() {
 
     setPdfBusy(true)
     try {
-      const [{ default: html2canvas }, { jsPDF }] = await Promise.all([
-        import('html2canvas'),
-        import('jspdf'),
-      ])
-      await document.fonts.ready
-      const logo = pdfReportRef.current.querySelector('img')
-      if (logo) await logo.decode()
-
-      const reportPages = [...pdfReportRef.current.querySelectorAll('.pdf-report-page')]
-      if (!reportPages.length) throw new Error('No timetable pages are available to export.')
-
-      const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'landscape' })
-      const margin = 8
-      const pageWidth = pdf.internal.pageSize.getWidth() - margin * 2
-      const pageHeight = pdf.internal.pageSize.getHeight() - margin * 2
-      pdf.setProperties({
+      await downloadReport(pdfReportRef.current, {
         title: 'Dhammakranti Shibir 2026 Activity Timetable',
-        author: 'Triratna Bauddha Mahasangh, Akola',
-        subject: showCompleted ? 'Completed timetable' : 'Activity timetable',
+        filename: `dhammakranti-shibir-2026-${showCompleted ? 'completed' : 'timetable'}.pdf`,
       })
-
-      for (const [index, page] of reportPages.entries()) {
-        const canvas = await html2canvas(page, {
-          scale: 2,
-          useCORS: true,
-          backgroundColor: '#fffefa',
-          width: 1100,
-          windowWidth: 1100,
-          onclone: (clonedDocument) => {
-            const clonedReport = clonedDocument.querySelector('.pdf-report')
-            if (clonedReport) {
-              clonedReport.style.position = 'static'
-              clonedReport.style.left = '0'
-              clonedReport.style.top = '0'
-              clonedReport.style.zIndex = 'auto'
-              clonedReport.style.visibility = 'visible'
-            }
-          },
-        })
-        if (!canvas.width || !canvas.height) throw new Error('PDF page rendered with empty dimensions.')
-
-        const sampledPixels = canvas.getContext('2d')?.getImageData(0, 0, canvas.width, canvas.height).data
-        let visiblePixelCount = 0
-        if (sampledPixels) {
-          for (let pixel = 0; pixel < sampledPixels.length; pixel += 4 * 64) {
-            if (sampledPixels[pixel] < 245 || sampledPixels[pixel + 1] < 245 || sampledPixels[pixel + 2] < 245) {
-              visiblePixelCount += 1
-            }
-          }
-        }
-        if (!visiblePixelCount) throw new Error('PDF page rendered without visible content.')
-
-        if (index > 0) pdf.addPage()
-        const ratio = Math.min(pageWidth / canvas.width, pageHeight / canvas.height)
-        const imageWidth = canvas.width * ratio
-        const imageHeight = canvas.height * ratio
-        const imageX = (pdf.internal.pageSize.getWidth() - imageWidth) / 2
-        pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', imageX, margin, imageWidth, imageHeight)
-      }
-
-      pdf.save(`dhammakranti-shibir-2026-${showCompleted ? 'completed' : 'timetable'}.pdf`)
       setNotice('PDF डाउनलोड झाले.')
     } catch (error) {
       console.error('Unable to generate timetable PDF.', error)
@@ -460,48 +405,13 @@ function TaskBoard() {
       </div>
       <p className="task-storage-note">वेळापत्रक या ब्राउझरमध्ये आपोआप जतन होते.</p>
 
-      <div className="pdf-report" ref={pdfReportRef} aria-hidden="true">
-        {Array.from({ length: Math.ceil(visibleRows.length / 8) }, (_, pageIndex) => (
-          <section className="pdf-report-page" key={pageIndex}>
-            <div className="pdf-report-frame">
-              <header className="pdf-report-header">
-                <img src={`${import.meta.env.BASE_URL}logo.png`} alt="" />
-                <h1>Triratna bauddha mahasang, Akola</h1>
-                <h2>Dhammakranti shibir 2026</h2>
-                <p>{showCompleted ? 'Completed Timetable' : 'Activity Timetable'}</p>
-              </header>
-              <table className="pdf-report-table">
-                <thead>
-                  <tr>
-                    <th>Sr. No.</th>
-                    <th>Activity</th>
-                    <th>Date (IST)</th>
-                    <th>Start Time (IST)</th>
-                    <th>End Time (IST)</th>
-                    <th>Notes</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {visibleRows.slice(pageIndex * 8, pageIndex * 8 + 8).map((row, rowIndex) => (
-                    <tr key={row.id}>
-                      <td>{String(pageIndex * 8 + rowIndex + 1).padStart(2, '0')}</td>
-                      <td>{row.activity}</td>
-                      <td>{formatDate(row.date)}</td>
-                      <td>{formatTime(row.startTime)}</td>
-                      <td>{formatTime(row.endTime)}</td>
-                      <td>{row.notes || '—'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <footer className="pdf-report-footer">
-                <span>Triratna Bauddha Mahasangh · Akola</span>
-                <span>Page {pageIndex + 1}</span>
-              </footer>
-            </div>
-          </section>
-        ))}
-      </div>
+      <PdfReport
+        reportRef={pdfReportRef}
+        title="Dhammakranti Shibir 2026"
+        subtitle={showCompleted ? 'Completed Timetable' : 'Activity Timetable'}
+        columns={['Activity', 'Date (IST)', 'Start (IST)', 'End (IST)', 'Notes']}
+        rows={visibleRows.map((row) => [row.activity, formatDate(row.date), formatTime(row.startTime), formatTime(row.endTime), row.notes])}
+      />
     </main>
   )
 }

@@ -1,0 +1,122 @@
+.print-report {
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: -1;
+  width: 1100px;
+  visibility: hidden;
+  pointer-events: none;
+  color: #233a32;
+  background: #fffdf6;
+  font-family: Arial, 'Noto Sans Devanagari', sans-serif;
+}
+
+.print-page {
+  width: 1100px;
+  min-height: 760px;
+  padding: 20px;
+  background: #fffdf6;
+}
+
+.print-frame {
+  display: flex;
+  flex-direction: column;
+  min-height: 720px;
+  padding: 26px;
+  border: 2px solid #b69550;
+  border-top: 10px solid #1e4538;
+  background: #fffdf6;
+}
+
+.print-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding-bottom: 22px;
+  border-bottom: 2px solid #c9ab6a;
+}
+
+.print-header img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.print-header p {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+
+.print-header .print-eyebrow {
+  color: #896b30;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+}
+
+.print-header h1 {
+  margin: 8px 0;
+  font-size: 25px;
+}
+
+.print-header h2 {
+  margin: 8px 0;
+  color: #896b30;
+  font-size: 22px;
+}
+
+.print-summary,
+.print-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  font-size: 10px;
+}
+
+.print-summary {
+  margin: 18px 0;
+  padding: 12px;
+  background: #edf2e8;
+  border-left: 4px solid #b69550;
+}
+
+.print-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.print-table th,
+.print-table td {
+  padding: 12px 8px;
+  border: 1px solid #d5ddcf;
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.print-table th {
+  color: #fff7df;
+  background: #1e4538;
+  font-size: 11px;
+}
+
+.print-table th:first-child {
+  width: 42px;
+}
+
+.print-table tr:nth-child(even) {
+  background: #f0f3eb;
+}
+
+.print-footer {
+  margin-top: auto;
+  padding-top: 24px;
+  color: #647568;
+}
+
+.print-footer strong {
+  color: #896b30;
+  letter-spacing: 0.2em;
+}

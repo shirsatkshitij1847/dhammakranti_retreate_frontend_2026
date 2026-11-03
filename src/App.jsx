@@ -3,6 +3,7 @@ import buddhaOne from '../buddha1.jpg'
 import './App.css'
 import HomePage from './HomePage'
 import BlogPage from './BlogPage'
+import ProfileMenu from './ProfileMenu'
 import RetreatPortal from './RetreatPortal'
 import { requestApi, SESSION_TOKEN_KEY } from './retreatApi'
 import TaskBoard from './TaskBoard'
@@ -26,6 +27,7 @@ function App() {
   const marqueeTrackRef = useRef(null)
   const pendingProtectedPageRef = useRef(null)
   const [currentPage, setCurrentPage] = useState(pageFromHash)
+  const [emailWarning, setEmailWarning] = useState('')
   const [session, setSession] = useState(() => {
     const token = window.sessionStorage.getItem(SESSION_TOKEN_KEY)
     return { token, account: null, loading: Boolean(token) }
@@ -73,6 +75,7 @@ function App() {
   }, [session.token])
 
   const acceptLogin = useCallback((authResult) => {
+    setEmailWarning(authResult.emailNotification?.status === 'failed' ? authResult.emailNotification.message : '')
     window.sessionStorage.setItem(SESSION_TOKEN_KEY, authResult.token)
     setSession({ token: authResult.token, account: authResult.account, loading: false })
     if (pendingProtectedPageRef.current) {
@@ -82,6 +85,7 @@ function App() {
   }, [])
 
   const logout = useCallback(() => {
+    setEmailWarning('')
     window.sessionStorage.removeItem(SESSION_TOKEN_KEY)
     setSession({ token: null, account: null, loading: false })
   }, [])
@@ -108,7 +112,7 @@ function App() {
 
   useEffect(() => {
     if (
-      ['blogs', 'registration', 'people', 'tasks'].includes(currentPage)
+      ['registration', 'people', 'tasks'].includes(currentPage)
       && !session.loading
       && !session.account
     ) {
@@ -146,7 +150,7 @@ function App() {
   }, [isAboutPage])
 
   return (
-    <>
+    <div className="app-shell" style={{ '--stupa-background': `url("${import.meta.env.BASE_URL}baground_stupa.png")` }}>
       <header className="site-header">
         <a className="header-wordmark" href="#top" aria-label="Triratna Akola — मुख्यपृष्ठ">
           <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Triratna Akola — by the youth, for the youth" />
@@ -156,7 +160,7 @@ function App() {
           </span>
         </a>
         <nav className="site-nav" aria-label="पृष्ठ नेव्हिगेशन">
-          {session.account && <a href="#blogs">ब्लॉग</a>}
+          <a href="#blogs">News &amp; Stories</a>
           {!isAboutPage && <a href="#about">आमच्याविषयी</a>}
           {isAboutPage && (
             <>
@@ -175,12 +179,15 @@ function App() {
           <a className="tasks-nav-link" href="#tasks">कार्य वेळापत्रक</a>
           {!isHomePage && <a href="#top">मुख्यपृष्ठ</a>}
         </nav>
+        <ProfileMenu key={session.account?._id || 'guest'} account={session.account} loading={session.loading} onLogout={logout} />
       </header>
+      {emailWarning && <div className="email-delivery-warning" role="alert">
+        <span>{emailWarning}</span>
+        <button type="button" onClick={() => setEmailWarning('')} aria-label="Dismiss email notification">Dismiss</button>
+      </div>}
 
       {currentPage === 'blogs' ? (
-        session.account
-          ? <BlogPage key={session.account._id} account={session.account} token={session.token} authLoading={session.loading} />
-          : <main className="blog-page"><p role="status">{session.loading ? 'Checking your account…' : 'Login required.'}</p><a href="#organization">Login</a></main>
+        <BlogPage key={session.account?._id || 'public'} account={session.account} token={session.token} authLoading={session.loading} />
       ) : isTaskBoard ? (
         session.loading ? (
           <main className="tasks-page"><section className="task-auth-notice" role="status">खाते तपासत आहोत…</section></main>
@@ -401,7 +408,7 @@ function App() {
           {footerLabel}
         </a>}
       </footer>
-    </>
+    </div>
   )
 }
 
