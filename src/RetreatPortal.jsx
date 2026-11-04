@@ -598,7 +598,8 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
   )
 }
 
-function CreateRetreat({ token, onLogout, onRefreshAccount }) {
+function CreateRetreat({ token, onLogout, onRefreshAccount, onRetreatsChanged }) {
+  const pendingMutation = useRef(false)
   const [retreats, setRetreats] = useState([])
   const [loadingRetreats, setLoadingRetreats] = useState(true)
   const [deletingId, setDeletingId] = useState('')
@@ -638,6 +639,8 @@ function CreateRetreat({ token, onLogout, onRefreshAccount }) {
 
   const submit = async (event) => {
     event.preventDefault()
+    if (pendingMutation.current) return
+    pendingMutation.current = true
     setError('')
     setMessage('')
     setSubmitting(true)
@@ -655,6 +658,7 @@ function CreateRetreat({ token, onLogout, onRefreshAccount }) {
         second.year - first.year || first.name.localeCompare(second.name)
       )))
       setMessage(`${retreat.name} · ${retreat.year} ${editingId ? 'शिबिर अद्ययावत झाले.' : 'शिबिर तयार झाले.'}`)
+      onRetreatsChanged()
     } catch (requestError) {
       if (requestError.status === 401) onLogout()
       else {
@@ -664,13 +668,15 @@ function CreateRetreat({ token, onLogout, onRefreshAccount }) {
         setError(requestError.message)
       }
     } finally {
+      pendingMutation.current = false
       setSubmitting(false)
     }
   }
 
   const deleteRetreat = async (retreat) => {
+    if (pendingMutation.current) return
     if (!window.confirm(`${retreat.name} · ${retreat.year} आणि त्यातील सर्व सहभागी नोंदणी कायमच्या हटवायच्या आहेत का? ही कृती पूर्ववत करता येणार नाही.`)) return
-
+    pendingMutation.current = true
     setListError('')
     setMessage('')
     setDeletingId(retreat._id)
@@ -678,6 +684,7 @@ function CreateRetreat({ token, onLogout, onRefreshAccount }) {
       await requestApi(`/api/retreats/${encodeURIComponent(retreat._id)}`, { method: 'DELETE' }, token)
       setRetreats((current) => current.filter((entry) => entry._id !== retreat._id))
       setMessage(`${retreat.name} · ${retreat.year} शिबिर आणि त्यातील नोंदणी हटवली.`)
+      onRetreatsChanged()
     } catch (requestError) {
       if (requestError.status === 401) onLogout()
       else {
@@ -687,6 +694,7 @@ function CreateRetreat({ token, onLogout, onRefreshAccount }) {
         setListError(requestError.message)
       }
     } finally {
+      pendingMutation.current = false
       setDeletingId('')
     }
   }
@@ -891,7 +899,12 @@ function OrganizationPage({ account, token, authLoading, onAuthenticated, onLogo
           <>
             <AdminDashboard account={account} token={token} onLogout={onLogout} onRefreshAccount={onRefreshAccount} refreshKey={dashboardRefreshKey} />
             <DashboardSection title="शिबिर व्यवस्थापन / Retreat setup">
-              <CreateRetreat token={token} onLogout={onLogout} onRefreshAccount={onRefreshAccount} />
+              <CreateRetreat
+                token={token}
+                onLogout={onLogout}
+                onRefreshAccount={onRefreshAccount}
+                onRetreatsChanged={() => setDashboardRefreshKey((current) => current + 1)}
+              />
             </DashboardSection>
             <DashboardSection title="खाते आणि भूमिका / Account management">
               <RoleManager

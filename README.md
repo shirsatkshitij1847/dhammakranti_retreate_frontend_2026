@@ -77,6 +77,8 @@ Restart Vite after changing it. Production builds continue using `.env`.
 The backend must allow the actual Vite origin in its CORS configuration.
 
 Admins can create or edit retreat dates and venue in Retreat Setup. New participant confirmations use those saved details and a separate warm welcome message in the same dark Buddhist design. Existing retreats without details show "To be confirmed by the organizer" in email; editing a retreat does not resend past emails.
+Retreat creation, updates, and deletion refresh the dashboard totals automatically.
+Pending retreat mutations block duplicate submissions.
 
 Timetable and retreat participant PDFs share a green/gold branded layout with logo, entry totals, generation date, and page numbers. Authorized organizers/admins can download the participant register from the participant list; exports include contact, center/payment, address, role, and retreat details and are marked confidential. Keep downloaded participant files private.
 PDFs use compact 14px single-line table text, 12px summary/footer text, and 22px headings with a smaller logo.
