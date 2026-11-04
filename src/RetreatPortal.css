@@ -2295,20 +2295,72 @@
 
 @media (max-width: 640px) {
   .retreat-page {
-    padding: 148px 16px 88px;
+    padding: 148px 10px 88px;
   }
 
   .retreat-card {
-    padding: 19px 16px;
+    padding: 14px 12px;
     border-radius: 16px;
   }
 
   .auth-card {
-    padding: 23px 18px;
+    padding: 16px 14px;
   }
 
-  .auth-card .retreat-card-heading h2 {
-    font-size: 23px;
+  .organization-login-page .retreat-page-heading {
+    margin-bottom: 18px;
+  }
+
+  .organization-login-page .retreat-page-heading h1 {
+    font-size: 30px;
+  }
+
+  .organization-login-page .retreat-page-heading > span {
+    margin-top: 8px;
+    font-size: 14px;
+  }
+
+  .auth-card .retreat-card-heading {
+    margin-bottom: 12px;
+  }
+
+  .auth-card .retreat-card-heading h2,
+  .organization-login-page .auth-card .retreat-card-heading h2 {
+    margin-top: 5px;
+    font-size: 22px;
+  }
+
+  .auth-mode-switch {
+    margin-bottom: 14px;
+    padding: 2px;
+  }
+
+  .auth-mode-switch button,
+  .auth-submit {
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  .auth-form {
+    gap: 12px;
+  }
+
+  .auth-form label {
+    gap: 5px;
+    font-size: 13px;
+  }
+
+  .auth-form input {
+    min-height: 44px;
+    padding: 8px 10px;
+  }
+
+  .auth-security-note {
+    margin-top: 12px;
+    padding: 9px 10px;
+    font-size: 11px;
+    line-height: 1.6;
   }
 
   .retreat-card-heading {
@@ -2327,6 +2379,24 @@
 
   .registration-field-wide {
     grid-column: auto;
+  }
+
+  .registration-form {
+    gap: 10px;
+  }
+
+  .registration-form label {
+    gap: 4px;
+  }
+
+  .registration-form :is(input, select, textarea) {
+    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 16px;
+  }
+
+  .registration-form textarea {
+    min-height: 72px;
   }
 
   .registration-submit {
@@ -2423,5 +2493,166 @@
 
   .admin-dashboard-page .account-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .retreat-page-heading {
+    margin-bottom: 18px;
+  }
+
+  .retreat-page-heading h1 {
+    font-size: 28px;
+  }
+
+  .retreat-page-heading > span {
+    font-size: 13px;
+  }
+
+  .admin-dashboard-page .dashboard-section > summary,
+  .admin-dashboard-page .waiting-approval-heading {
+    padding: 12px;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-dashboard-page .dashboard-section-body {
+    padding: 0 6px 6px;
+  }
+
+  .admin-dashboard-page .dashboard-section-body > .retreat-card {
+    min-width: 0;
+    padding: 8px;
+  }
+
+  .admin-dashboard-page .retreat-card-heading {
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .admin-dashboard-page .retreat-card-heading h2 {
+    font-size: 19px;
+  }
+
+  .admin-dashboard-page .retreat-card-kicker {
+    font-size: 10px;
+  }
+
+  .retreat-create-form,
+  .admin-dashboard-page .account-password-form {
+    min-width: 0;
+    gap: 8px;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+
+  .retreat-create-form label,
+  .admin-dashboard-page .retreat-create-form label,
+  .admin-dashboard-page .account-password-form label {
+    min-width: 0;
+    max-width: 100%;
+    gap: 4px;
+    font-size: 12px;
+  }
+
+  .retreat-create-form input,
+  .admin-dashboard-page .retreat-create-form input,
+  .admin-dashboard-page .account-password-form input,
+  .account-row select,
+  .admin-dashboard-page .account-row select,
+  .people-page .people-retreat-filter select {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 16px;
+  }
+
+  .admin-dashboard-page .account-password-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-dashboard-page .account-password-form label {
+    flex: none;
+    width: 100%;
+  }
+
+  .admin-dashboard-page .account-password-form .retreat-primary-button {
+    align-self: stretch;
+  }
+
+  .retreat-create-actions {
+    gap: 8px;
+    padding-top: 10px;
+  }
+
+  .retreat-create-actions > button {
+    flex: 1 1 120px;
+  }
+
+  .admin-dashboard-page :is(.retreat-primary-button, .retreat-secondary-button, .people-delete-button, .account-password-toggle),
+  .admin-dashboard-page .account-row .retreat-secondary-button {
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 8px 10px;
+    font-size: 12px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-dashboard-page :is(.account-row, .waiting-approval-row) {
+    min-width: 0;
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .admin-dashboard-page :is(.account-identity, .account-profile-details dd, .admin-quick-link > span) {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-dashboard-page :is(.account-identity strong, .account-profile-details dd, .retreat-admin-list li > span, .admin-quick-link strong) {
+    font-size: 14px;
+  }
+
+  .admin-dashboard-page :is(.account-identity span, .account-identity small, .retreat-admin-list li small, .admin-quick-link small) {
+    font-size: 12px;
+  }
+
+  .admin-dashboard-page .admin-summary-card {
+    min-width: 0;
+    min-height: 92px;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 6px;
+    padding: 10px;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-dashboard-page .admin-summary-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .admin-dashboard-page .admin-summary-card strong {
+    font-size: 26px;
+  }
+
+  .admin-dashboard-page .admin-summary-card a {
+    font-size: 12px;
+  }
+
+  .admin-dashboard-page .admin-quick-link {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .admin-dashboard-page .admin-welcome-panel {
+    padding: 12px;
+  }
+
+  .admin-dashboard-page .admin-welcome-copy h2 {
+    font-size: 24px;
   }
 }

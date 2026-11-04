@@ -346,11 +346,11 @@ function TaskBoard() {
                   {drafts.map((row, index) => (
                     <tr key={row.id}>
                       <td className="serial-cell">{String(index + 1).padStart(2, '0')}</td>
-                      <td><input aria-label={`Activity ${index + 1}`} value={row.activity} onChange={(event) => updateDraft(row.id, 'activity', event.target.value)} placeholder="कार्य" maxLength={100} /></td>
-                      <td><input aria-label={`Date ${index + 1}`} type="date" value={row.date} onChange={(event) => updateDraft(row.id, 'date', event.target.value)} /></td>
-                      <td><input aria-label={`Start Time ${index + 1}`} type="time" value={row.startTime} onChange={(event) => updateDraft(row.id, 'startTime', event.target.value)} /></td>
-                      <td><input aria-label={`End Time ${index + 1}`} type="time" value={row.endTime} onChange={(event) => updateDraft(row.id, 'endTime', event.target.value)} /></td>
-                      <td><input aria-label={`Notes ${index + 1}`} value={row.notes} onChange={(event) => updateDraft(row.id, 'notes', event.target.value)} placeholder="ऐच्छिक" maxLength={240} /></td>
+                      <td data-label="Activity"><input aria-label={`Activity ${index + 1}`} value={row.activity} onChange={(event) => updateDraft(row.id, 'activity', event.target.value)} placeholder="कार्य" maxLength={100} /></td>
+                      <td data-label="Date (IST)"><input aria-label={`Date ${index + 1}`} type="date" value={row.date} onChange={(event) => updateDraft(row.id, 'date', event.target.value)} /></td>
+                      <td data-label="Start Time (IST)"><input aria-label={`Start Time ${index + 1}`} type="time" value={row.startTime} onChange={(event) => updateDraft(row.id, 'startTime', event.target.value)} /></td>
+                      <td data-label="End Time (IST, optional)"><input aria-label={`End Time ${index + 1}`} type="time" value={row.endTime} onChange={(event) => updateDraft(row.id, 'endTime', event.target.value)} /></td>
+                      <td data-label="Notes"><input aria-label={`Notes ${index + 1}`} value={row.notes} onChange={(event) => updateDraft(row.id, 'notes', event.target.value)} placeholder="ऐच्छिक" maxLength={240} /></td>
                       <td><button className="draft-remove" type="button" onClick={() => removeDraft(row.id)} aria-label={`नोंद ${index + 1} काढा`}>×</button></td>
                     </tr>
                   ))}

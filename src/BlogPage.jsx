@@ -131,8 +131,10 @@ function BlogPage({ account, token, authLoading }) {
   return (
     <main className="blog-page">
       <header className="blog-heading">
+        <p className="blog-heading-community">त्रिरत्न बौद्ध महासंघ · अकोला</p>
         <p className="story-kicker">THE COMMUNITY JOURNAL</p>
         <h1>News &amp; Stories</h1>
+        <span className="blog-heading-ornament" aria-hidden="true">✦</span>
         <p className="blog-heading-copy">Moments of friendship. Stories of transformation. A little inspiration for your journey.</p>
       </header>
       {!authLoading && canPublish && (
@@ -159,11 +161,15 @@ function BlogPage({ account, token, authLoading }) {
         </form>
       )}
       {error && <div className="blog-error" role="alert">{error} <button type="button" disabled={busy || loading} onClick={() => { setLoading(true); loadBlogs() }}>Retry loading posts</button></div>}
-      {notice && <p role="status">{notice}</p>}
-      {loading ? <p role="status">Loading posts…</p> : (
+      {notice && <p className="blog-status" role="status">{notice}</p>}
+      {loading ? <p className="blog-status" role="status">Loading posts…</p> : (
         <section className={`blog-posts ${detailId ? 'blog-reading-view' : 'blog-story-grid'}`} aria-label="News and stories" aria-busy={busy}>
           {detailId && <button type="button" onClick={() => setDetailId(null)}>Back to all stories</button>}
-          {!blogs.length && !error && <p>No posts on this page yet.</p>}
+          {!blogs.length && !error && <div className="blog-empty">
+            <p className="story-kicker">A SPACE FOR OUR STORIES</p>
+            <h2>Every journey has a story.</h2>
+            <p>No posts on this page yet. Come back soon for moments from our community.</p>
+          </div>}
           {blogs.filter((blog) => !detailId || blog._id === detailId).map((blog) => (
             <article className={`blog-post${detailId ? ' blog-post-expanded' : ''}`} key={`${blog._id}-${Boolean(detailId)}`}>
               <p className="story-kicker">{detailId ? 'TRIRATNA AKOLA · COMMUNITY JOURNAL' : 'FROM OUR COMMUNITY'}</p>

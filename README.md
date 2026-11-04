@@ -89,6 +89,16 @@ The top-right profile button shows the signed-in user's initial. Hover, keyboard
 
 Organization/admin, registration, participant, and activity/timetable pages use the stupa image with a dark overlay behind their existing cards for readability.
 
+On screens up to 640px wide, login/sign-up and participant registration forms use
+compact spacing. Login headings and controls are smaller, while form inputs retain
+16px text and at least 44px height for mobile usability. Desktop layouts are unchanged.
+Mobile dashboards also use compact section/card padding, labels, retreat setup,
+account-role controls, password resets, and participant filters. Fields shrink
+to their container width; password-reset actions stack below their input.
+The mobile timetable creation form stacks labeled fields into screen-width cards
+instead of requiring sideways scrolling. The saved timetable retains horizontal
+scrolling for its multi-column table; desktop creation remains tabular.
+
 - `#registration` loads retreats and accepts participant registrations.
 - `#organization` provides login/sign-up, an admin approval queue, retreat management, and account controls.
 - Admin profile, retreat setup, account management, and pending approvals are
@@ -118,6 +128,10 @@ On each fresh launch/reload from November 3 through November 7, 2026 (India time
 - Guests and visitors see only story previews (title, image, and text), without upload forms or publishing prompts. “View more” opens the full story; “Back to all stories” returns to the list.
 - News & Stories uses translucent reading panels over a darkened stupa background. Expanded stories add a journal-style headline, reading time, publication date when available, and a reduced-motion-aware entrance effect without changing the author's text.
 - News & Stories has a compact heading and responsive image-led cards with proportional images and three-line previews: multiple columns on desktop and a single column on mobile, with full-width expanded reading.
+- The community journal uses the forest/stupa background, translucent teal story
+  and editor panels, gold accents, and a centered editorial-style heading.
+  Serif English titles pair with the existing Marathi fonts; expanded stories
+  use a constrained reading width. No additional font downloads are required.
 - Mobile story cards use a compact 140px image first, two-line titles/previews, and compact metadata; expanded stories retain their full text and larger artwork.
 - For older API responses without `textFormat`, complete paragraph/heading/list/quote
   HTML is recognized and sanitized for previews, reading, and editing. Explicit
