@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import PdfReport from './PdfReport'
 import { downloadReport } from './downloadReport'
 import { requestApi } from './retreatApi'
+import { getEmailFeedback } from './emailNotification'
+import EmailAction from './EmailAction'
+import useEmailFeedback from './useEmailFeedback'
 import './RetreatPortal.css'
 
 const EMPTY_REGISTRATION = {
@@ -22,6 +26,30 @@ const ROLE_LABELS = {
   admin: 'Admin',
 }
 
+function DashboardSection({ title, children }) {
+  const sectionRef = useRef(null)
+
+  useEffect(() => {
+    const revealTarget = () => {
+      const target = document.getElementById(window.location.hash.slice(1))
+      if (!target || !sectionRef.current?.contains(target)) return
+      sectionRef.current.open = true
+      if (target instanceof HTMLDetailsElement) target.open = true
+      requestAnimationFrame(() => target.scrollIntoView({ block: 'start' }))
+    }
+    revealTarget()
+    window.addEventListener('hashchange', revealTarget)
+    return () => window.removeEventListener('hashchange', revealTarget)
+  }, [])
+
+  return (
+    <details className="dashboard-section" ref={sectionRef}>
+      <summary>{title}</summary>
+      <div className="dashboard-section-body">{children}</div>
+    </details>
+  )
+}
+
 function RegistrationPage({ token, onLogout, onRefreshAccount }) {
   const [retreats, setRetreats] = useState([])
   const [selectedRetreatId, setSelectedRetreatId] = useState('')
@@ -29,6 +57,7 @@ function RegistrationPage({ token, onLogout, onRefreshAccount }) {
   const [registration, setRegistration] = useState(EMPTY_REGISTRATION)
   const [registrationMessage, setRegistrationMessage] = useState('')
   const [registrationError, setRegistrationError] = useState('')
+  const [savedRegistration, setSavedRegistration] = useState(null)
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
@@ -60,6 +89,7 @@ function RegistrationPage({ token, onLogout, onRefreshAccount }) {
 
   const submitRegistration = async (event) => {
     event.preventDefault()
+    if (submitting) return
     setRegistrationError('')
     setRegistrationMessage('')
     setSubmitting(true)
@@ -70,7 +100,7 @@ function RegistrationPage({ token, onLogout, onRefreshAccount }) {
       }, token)
       setRegistration({ ...EMPTY_REGISTRATION })
       setRegistrationMessage('नोंदणी यशस्वी झाली. धन्यवाद!')
-      if (result.emailNotification?.status === 'failed') setRegistrationError(result.emailNotification.message)
+      setSavedRegistration(result)
     } catch (error) {
       if (error.status === 401) {
         onLogout()
@@ -87,7 +117,7 @@ function RegistrationPage({ token, onLogout, onRefreshAccount }) {
   }
 
   return (
-    <main className="retreat-page">
+    <main className="retreat-page registration-page">
       <header className="retreat-page-heading">
         <p>त्रिरत्न बौद्ध महासंघ · अकोला</p>
         <h1>धम्मक्रांती शिबिर नोंदणी</h1>
@@ -163,6 +193,12 @@ function RegistrationPage({ token, onLogout, onRefreshAccount }) {
             </button>
           </div>
         </form>
+        {savedRegistration && (
+          <div className="registration-email-action">
+            <p>मागील यशस्वी नोंदणी: {savedRegistration.name} {savedRegistration.surname}. ईमेल आपोआप पाठवला जात नाही.</p>
+            <EmailAction key={savedRegistration._id} resource="users" id={savedRegistration._id} email={savedRegistration.email} token={token} onLogout={onLogout} onRefreshAccount={onRefreshAccount} />
+          </div>
+        )}
       </section>
     </main>
   )
@@ -180,6 +216,7 @@ function AuthForm({ onAuthenticated }) {
 
   const submit = async (event) => {
     event.preventDefault()
+    if (submitting) return
     setError('')
     if (isSignup && password !== confirmation) {
       setError('दोन्ही पासवर्ड जुळत नाहीत.')
@@ -192,7 +229,7 @@ function AuthForm({ onAuthenticated }) {
         method: 'POST',
         body: JSON.stringify(isSignup ? { name, email, password } : { email, password }),
       })
-      onAuthenticated(result)
+      onAuthenticated(result, isSignup ? 'signup' : 'login')
     } catch (requestError) {
       setError(requestError.message)
     } finally {
@@ -318,6 +355,7 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
   const [passwordBusy, setPasswordBusy] = useState(false)
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
+  const [emailFeedback, setEmailFeedback] = useEmailFeedback()
 
   useEffect(() => {
     const controller = new AbortController()
@@ -370,6 +408,7 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
   const approveOrganizer = async (target) => {
     setError('')
     setMessage('')
+    setEmailFeedback(null)
     setApprovingId(target._id)
     try {
       const updated = await requestApi(`/api/accounts/${encodeURIComponent(target._id)}/role`, {
@@ -380,7 +419,9 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
       setAccounts((current) => current.map((entry) => entry._id === updated._id ? updated : entry))
       setRoles((current) => ({ ...current, [updated._id]: updated.role }))
       setMessage(`${updated.name} यांना Organizer म्हणून मंजुरी दिली.`)
+      setEmailFeedback(getEmailFeedback(updated.emailNotification, 'approval'))
       onAccountsChanged()
+      await onRefreshAccount()
     } catch (requestError) {
       if (requestError.status === 401) onLogout()
       else setError(requestError.message)
@@ -392,6 +433,7 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
   const updateRole = async (target) => {
     setError('')
     setMessage('')
+    setEmailFeedback(null)
     setSavingId(target._id)
     try {
       const updated = await requestApi(`/api/accounts/${encodeURIComponent(target._id)}/role`, {
@@ -403,6 +445,7 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
         ? [updated, ...current.filter((entry) => entry._id !== updated._id)]
         : current.filter((entry) => entry._id !== updated._id))
       setMessage(`${updated.name} यांची भूमिका ${ROLE_LABELS[updated.role]} केली.`)
+      setEmailFeedback(getEmailFeedback(updated.emailNotification, 'approval'))
       onAccountsChanged()
       await onRefreshAccount()
     } catch (requestError) {
@@ -446,11 +489,12 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
       <p className="people-privacy-note">नवीन साइन-अप Visitor म्हणून येतात. Retreat, सहभागी यादी आणि भूमिका व्यवस्थापनासाठी Admin आवश्यक आहे.</p>
       {error && <p className="retreat-feedback is-error" role="alert">{error}</p>}
       {message && <p className="retreat-feedback is-success" role="status">{message}</p>}
-      <section className="waiting-approval-section" id="waiting-approval" aria-labelledby="waiting-approval-title">
-        <div className="waiting-approval-heading">
+      {emailFeedback && <p className={`retreat-feedback ${emailFeedback.warning ? 'is-warning' : 'is-success'}`} role={emailFeedback.warning ? 'alert' : 'status'}>{emailFeedback.message}</p>}
+      <details className="waiting-approval-section" id="waiting-approval">
+        <summary className="waiting-approval-heading">
           <h3 id="waiting-approval-title">Waiting for admin approval</h3>
           <span>{waitingAccounts.length}</span>
-        </div>
+        </summary>
         {loading ? (
           <p className="people-empty">मंजुरीसाठी खाती लोड होत आहेत…</p>
         ) : waitingAccounts.length ? (
@@ -483,7 +527,7 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
         ) : (
           <p className="people-empty">मंजुरीसाठी कोणतेही Visitor खाते नाही.</p>
         )}
-      </section>
+      </details>
       {loading ? (
         <p className="people-empty">खाती लोड होत आहेत…</p>
       ) : accounts.length ? (
@@ -523,6 +567,7 @@ function RoleManager({ token, account, onLogout, onRefreshAccount, onAccountsCha
               >
                 {resettingId === entry._id ? 'पासवर्ड फॉर्म बंद करा' : 'पासवर्ड बदला'}
               </button>
+              <EmailAction key={`${entry._id}-${entry.role}`} resource="accounts" id={entry._id} email={entry.email} token={token} onLogout={onLogout} onRefreshAccount={onRefreshAccount} />
               {resettingId === entry._id && (
                 <form className="account-password-form" onSubmit={(event) => resetPassword(event, entry)}>
                   <label>
@@ -675,17 +720,19 @@ function CreateRetreat({ token, onLogout, onRefreshAccount }) {
           ठिकाण / Venue
           <input required value={venue} onChange={(event) => setVenue(event.target.value)} maxLength={300} />
         </label>
-        <button type="submit" className="retreat-primary-button" disabled={submitting || Boolean(deletingId)}>
-          {submitting ? 'जतन होत आहे…' : editingId ? 'बदल जतन करा' : 'शिबिर तयार करा'}
-        </button>
-        {editingId && <button type="button" className="retreat-secondary-button" disabled={submitting} onClick={() => {
-          setEditingId('')
-          setName('')
-          setStartDate('')
-          setEndDate('')
-          setVenue('')
-          setError('')
-        }}>रद्द करा / Cancel</button>}
+        <div className="retreat-create-actions">
+          {editingId && <button type="button" className="retreat-secondary-button" disabled={submitting} onClick={() => {
+            setEditingId('')
+            setName('')
+            setStartDate('')
+            setEndDate('')
+            setVenue('')
+            setError('')
+          }}>रद्द करा / Cancel</button>}
+          <button type="submit" className="retreat-primary-button" disabled={submitting || Boolean(deletingId)}>
+            {submitting ? 'जतन होत आहे…' : editingId ? 'बदल जतन करा' : 'शिबिर तयार करा'}
+          </button>
+        </div>
       </form>
       {error && <p className="retreat-feedback is-error" role="alert">{error}</p>}
       {message && <p className="retreat-feedback is-success" role="status">{message}</p>}
@@ -768,18 +815,22 @@ function AdminDashboard({ account, token, onLogout, onRefreshAccount, refreshKey
 
   return (
     <>
-      <section className="admin-welcome-panel">
-        <div className="admin-welcome-copy">
-          <span className="admin-welcome-kicker">TRIRATNA AKOLA · ADMIN CONSOLE</span>
-          <h2>नमस्कार, {account.name}</h2>
-          <p>शिबिर, सहभागी आणि व्यवस्थापन खात्यांचे एकाच ठिकाणी नियंत्रण.</p>
-        </div>
-        <div className="admin-welcome-actions">
-          <span className="admin-account-badge"><span aria-hidden="true">✦</span> Admin</span>
-          <button type="button" className="retreat-secondary-button" onClick={onLogout}>लॉग आउट</button>
-        </div>
-      </section>
-      <AccountProfile account={account} />
+      <div className="admin-overview">
+        <section className="admin-welcome-panel">
+          <div className="admin-welcome-copy">
+            <span className="admin-welcome-kicker">TRIRATNA AKOLA · ADMIN CONSOLE</span>
+            <h2>नमस्कार, {account.name}</h2>
+            <p>शिबिर, सहभागी आणि व्यवस्थापन खात्यांचे एकाच ठिकाणी नियंत्रण.</p>
+          </div>
+          <div className="admin-welcome-actions">
+            <span className="admin-account-badge"><span aria-hidden="true">✦</span> Admin</span>
+            <button type="button" className="retreat-secondary-button" onClick={onLogout}>लॉग आउट</button>
+          </div>
+        </section>
+        <DashboardSection title="प्रोफाइल माहिती / Profile information">
+          <AccountProfile account={account} />
+        </DashboardSection>
+      </div>
 
       <section className="admin-summary-grid" aria-label="व्यवस्थापन सारांश">
         <article className="admin-summary-card">
@@ -824,7 +875,7 @@ function OrganizationPage({ account, token, authLoading, onAuthenticated, onLogo
   const [dashboardRefreshKey, setDashboardRefreshKey] = useState(0)
 
   return (
-    <main className="retreat-page organization-page">
+    <main className={`retreat-page organization-page${!account && !authLoading ? ' organization-login-page' : ''}${account?.role === 'admin' ? ' admin-dashboard-page' : ''}`}>
       <header className="retreat-page-heading">
         <p>त्रिरत्न बौद्ध महासंघ · अकोला</p>
         <h1>{account?.role === 'admin' ? 'Admin Dashboard' : 'संघटन व्यवस्थापन'}</h1>
@@ -839,14 +890,18 @@ function OrganizationPage({ account, token, authLoading, onAuthenticated, onLogo
           {account.role === 'admin' ? (
           <>
             <AdminDashboard account={account} token={token} onLogout={onLogout} onRefreshAccount={onRefreshAccount} refreshKey={dashboardRefreshKey} />
-            <CreateRetreat token={token} onLogout={onLogout} onRefreshAccount={onRefreshAccount} />
-            <RoleManager
+            <DashboardSection title="शिबिर व्यवस्थापन / Retreat setup">
+              <CreateRetreat token={token} onLogout={onLogout} onRefreshAccount={onRefreshAccount} />
+            </DashboardSection>
+            <DashboardSection title="खाते आणि भूमिका / Account management">
+              <RoleManager
               token={token}
               account={account}
               onLogout={onLogout}
               onRefreshAccount={onRefreshAccount}
               onAccountsChanged={() => setDashboardRefreshKey((current) => current + 1)}
-            />
+              />
+            </DashboardSection>
           </>
           ) : (
           account.role === 'organizer' ? (
@@ -877,9 +932,20 @@ function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount })
   const [people, setPeople] = useState([])
   const [retreats, setRetreats] = useState([])
   const [retreatFilter, setRetreatFilter] = useState('')
+  const [bulkSending, setBulkSending] = useState(false)
+  const [individualSending, setIndividualSending] = useState(0)
+  const [bulkResults, setBulkResults] = useState([])
+  const [showBulkResults, setShowBulkResults] = useState(false)
+  const mailBusy = useRef(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [deletingId, setDeletingId] = useState('')
+
+  useEffect(() => {
+    if (bulkSending || !showBulkResults || !bulkResults.length) return undefined
+    const timer = window.setTimeout(() => setShowBulkResults(false), 8000)
+    return () => window.clearTimeout(timer)
+  }, [bulkSending, bulkResults, showBulkResults])
 
   useEffect(() => {
     if (!token || !['admin', 'organizer'].includes(account?.role)) return undefined
@@ -919,6 +985,39 @@ function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount })
   const reportSubtitle = selectedRetreat
     ? `${selectedRetreat.name} · ${selectedRetreat.year}`
     : retreatFilter === 'unassigned' ? 'Retreat unavailable' : 'All retreats'
+
+  const sendAllEmails = async () => {
+    if (mailBusy.current || individualSending) return
+    const recipients = visiblePeople.filter((person) => person.email && person.retreatId)
+    if (!recipients.length || !window.confirm(`Send registration emails to ${recipients.length} participants in "${reportSubtitle}"? Previously emailed registrations will receive another email. Participants without an email or retreat are skipped.`)) return
+    mailBusy.current = true
+    setError('')
+    setBulkSending(true)
+    setBulkResults([])
+    setShowBulkResults(true)
+    try {
+      for (const person of recipients) {
+        try {
+          const result = await requestApi(`/api/users/${encodeURIComponent(person._id)}/email`, { method: 'POST' }, token)
+          const feedback = getEmailFeedback(result.emailNotification || { status: 'unknown' }, 'registration-email')
+          setBulkResults((current) => [...current, { id: person._id, name: `${person.name} ${person.surname}`, ...feedback }])
+        } catch (requestError) {
+          setBulkResults((current) => [...current, { id: person._id, name: `${person.name} ${person.surname}`, warning: true, message: requestError.message }])
+          if (requestError.status === 401) onLogout()
+          if (requestError.status === 403) await onRefreshAccount()
+          if ([401, 403, 429, 503].includes(requestError.status) || !requestError.status) {
+            setError('Bulk email stopped. Remaining participants were not emailed. Check the results before sending again.')
+            break
+          }
+        }
+      }
+    } catch (requestError) {
+      setError(requestError.message)
+    } finally {
+      mailBusy.current = false
+      setBulkSending(false)
+    }
+  }
 
   const downloadPeople = async () => {
     setPdfBusy(true)
@@ -992,12 +1091,33 @@ function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount })
           </div>
           <label className="people-retreat-filter">
             शिबिर निवडा / Select retreat
-            <select value={retreatFilter} disabled={loading || pdfBusy || Boolean(deletingId)} onChange={(event) => setRetreatFilter(event.target.value)}>
+            <select value={retreatFilter} disabled={loading || pdfBusy || Boolean(deletingId) || bulkSending || individualSending > 0} onChange={(event) => { setRetreatFilter(event.target.value); setBulkResults([]) }}>
               <option value="">All retreats / सर्व शिबिरे</option>
               {retreats.map((retreat) => <option key={retreat._id} value={retreat._id}>{retreat.name} · {retreat.year}</option>)}
               {people.some((person) => !person.retreatId) && <option value="unassigned">Retreat unavailable</option>}
             </select>
           </label>
+          <div className="participant-email-toolbar">
+            <div className="participant-email-copy">
+              <h3>Participant emails <span>{visiblePeople.filter((person) => person.email && person.retreatId).length} eligible</span></h3>
+              <p>Send confirmations to this list, or use the email button beside a participant.</p>
+              <small>Missing emails or retreats are skipped. Sending again may deliver another message.</small>
+            </div>
+            <button type="button" className="retreat-primary-button" disabled={loading || bulkSending || individualSending > 0 || Boolean(deletingId) || !visiblePeople.some((person) => person.email && person.retreatId)} onClick={sendAllEmails}>
+              {bulkSending ? `Sending… ${bulkResults.length}` : 'Send all emails'}
+            </button>
+          </div>
+          {!bulkSending && showBulkResults && bulkResults.length > 0 && createPortal(
+            <section className={`participant-email-toast${bulkResults.some((result) => result.warning) ? ' has-warning' : ''}`} aria-label="Bulk email results" role="status">
+              <div className="participant-email-toast-heading">
+                <strong>Email results</strong>
+                <button type="button" onClick={() => setShowBulkResults(false)} aria-label="Dismiss email results">&times;</button>
+              </div>
+              <p>{bulkResults.filter((result) => !result.warning).length} accepted by SMTP · {bulkResults.filter((result) => result.warning).length} failed or unconfirmed</p>
+              <ul>{bulkResults.map((result) => <li key={result.id}>{result.name}: {result.message}</li>)}</ul>
+            </section>,
+            document.body,
+          )}
           <p className="people-privacy-note">सहभागींची वैयक्तिक माहिती फक्त अधिकृत Organizer आणि Admin वापरासाठी आहे.</p>
           {error && <p className="retreat-feedback is-error" role="alert">{error}</p>}
           {loading ? (
@@ -1006,7 +1126,7 @@ function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount })
             <div className="people-table-scroll">
               <table className="people-table">
                 <thead>
-                  <tr><th>नाव</th><th>भूमिका</th><th>शिबिर</th><th>मोबाईल</th><th>ईमेल</th><th>केंद्र</th><th>पेमेंट</th><th>पत्ता</th>{account.role === 'admin' && <th>कृती</th>}</tr>
+                  <tr><th>नाव</th><th>भूमिका</th><th>शिबिर</th><th>मोबाईल</th><th>ईमेल</th><th>केंद्र</th><th>पेमेंट</th><th>पत्ता</th><th>ईमेल पाठवा</th>{account.role === 'admin' && <th>कृती</th>}</tr>
                 </thead>
                 <tbody>
                   {visiblePeople.map((person) => (
@@ -1019,7 +1139,8 @@ function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount })
                       <td>{person.center || '—'}</td>
                       <td>{person.centerPayment || '—'}</td>
                       <td>{person.address}</td>
-                      {account.role === 'admin' && <td><button type="button" className="people-delete-button" disabled={pdfBusy || Boolean(deletingId)} onClick={() => deletePerson(person)}>{deletingId === person._id ? 'हटवत आहे…' : 'हटवा'}</button></td>}
+                      <td><EmailAction resource="users" id={person._id} email={person.email} token={token} onLogout={onLogout} onRefreshAccount={onRefreshAccount} disabled={bulkSending || Boolean(deletingId) || !person.retreatId} onSendingChange={(sending) => setIndividualSending((current) => current + (sending ? 1 : -1))} /></td>
+                      {account.role === 'admin' && <td><button type="button" className="people-delete-button" disabled={pdfBusy || Boolean(deletingId) || bulkSending || individualSending > 0} onClick={() => deletePerson(person)}>{deletingId === person._id ? 'हटवत आहे…' : 'हटवा'}</button></td>}
                     </tr>
                   ))}
                 </tbody>
@@ -1033,13 +1154,16 @@ function PeoplePage({ account, token, authLoading, onLogout, onRefreshAccount })
             title="Retreat Participant Register"
             subtitle={reportSubtitle}
             confidential
-            rowsPerPage={4}
-            columns={['Name / Role', 'Retreat', 'Mobile / Email', 'Center / Payment', 'Address']}
+            rowsPerPage={12}
+            columns={['Name', 'Role', 'Retreat', 'Mobile', 'Email', 'Center', 'Payment', 'Address']}
             rows={visiblePeople.map((person) => [
-              `${[person.name, person.middleName, person.surname].filter(Boolean).join(' ')}\n${ROLE_LABELS[person.role] || person.role || 'Visitor'}`,
+              [person.name, person.middleName, person.surname].filter(Boolean).join(' '),
+              ROLE_LABELS[person.role] || person.role || 'Visitor',
               person.retreatId ? `${person.retreatId.name} · ${person.retreatId.year}` : '—',
-              `${person.mobileNumber}\n${person.email || '—'}`,
-              `${person.center || '—'}\nPayment: ${person.centerPayment || '—'}`,
+              person.mobileNumber,
+              person.email || '—',
+              person.center || '—',
+              person.centerPayment || '—',
               person.address,
             ])}
           />

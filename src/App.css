@@ -19,6 +19,8 @@
   justify-content: space-between;
   gap: 16px;
   padding: 18px;
+  font-size: 15px;
+  line-height: 1.6;
   color: #fff1bd;
   background: #352a16;
   border: 1px solid #c6a75e;
@@ -28,6 +30,12 @@
 .email-delivery-warning button {
   padding: 8px;
   cursor: pointer;
+}
+
+.email-delivery-warning.is-success {
+  color: #e6ffe7;
+  background: #183c29;
+  border-color: #a8e7b9;
 }
 
 body {
@@ -497,12 +505,18 @@ body {
 }
 
 .home-buddha-art img {
+  animation: buddha-entrance 900ms ease-out both;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.34));
+}
+
+@keyframes buddha-entrance {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .buddha-art-caption {

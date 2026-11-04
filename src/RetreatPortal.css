@@ -115,6 +115,112 @@
   border-radius: 14px;
 }
 
+.retreat-create-actions {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(211, 239, 232, 0.16);
+}
+
+.email-action {
+  min-width: 0;
+  justify-self: start;
+}
+
+.participant-email-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.participant-email-toolbar p {
+  flex: 1 1 260px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.participant-email-results {
+  max-height: 260px;
+  overflow: auto;
+  padding: 14px;
+  margin-bottom: 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(211, 239, 232, 0.25);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.participant-email-toast {
+  position: fixed;
+  z-index: 30;
+  top: 100px;
+  right: 20px;
+  width: min(390px, calc(100vw - 32px));
+  max-height: min(360px, 60vh);
+  overflow: auto;
+  padding: 16px 18px;
+  color: #e3f6ed;
+  background: #203d34;
+  border: 1px solid #6ea78d;
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.participant-email-toast.has-warning {
+  color: #fff0da;
+  background: #493725;
+  border-color: #b99461;
+}
+
+.participant-email-toast-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.participant-email-toast-heading button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.participant-email-toast p {
+  margin: 8px 0;
+}
+
+.participant-email-toast ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.email-action .retreat-feedback {
+  max-width: 320px;
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.registration-email-action {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(211, 239, 232, 0.2);
+}
+
 .registration-form label,
 .retreat-create-form label {
   display: grid;
@@ -231,6 +337,12 @@
   border-color: rgba(168, 231, 185, 0.42);
 }
 
+.retreat-feedback.is-warning {
+  color: #fff1bd;
+  background: #352a16;
+  border-color: #c6a75e;
+}
+
 .registration-submit {
   display: flex;
   align-items: center;
@@ -315,6 +427,203 @@
   border-bottom: 0;
 }
 
+.people-page {
+  padding-right: clamp(16px, 3vw, 48px);
+  padding-left: clamp(16px, 3vw, 48px);
+}
+
+.people-page > .retreat-page-heading,
+.people-page > .people-card {
+  width: min(1600px, 100%);
+}
+
+.people-page .people-card {
+  background: linear-gradient(140deg, rgba(27, 44, 60, 0.96), rgba(19, 34, 48, 0.96));
+  border-color: #3a5064;
+  box-shadow: 0 16px 40px rgba(3, 12, 23, 0.28);
+}
+
+.people-page .people-table-scroll {
+  background: #152534;
+  border-color: #3a5064;
+  border-radius: 10px;
+  scrollbar-color: #627c92 #152534;
+}
+
+.people-page .people-table th {
+  padding: 14px 12px;
+  color: #c9d9e8;
+  background: #22384e;
+  border-bottom: 1px solid #49617a;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.people-page .people-table td {
+  padding: 14px 12px;
+  color: #d9e4ed;
+  background: #162838;
+  border-bottom-color: #2e4356;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  vertical-align: middle;
+  transition: background-color 140ms ease;
+}
+
+.people-page .people-table tbody tr:nth-child(even) td {
+  background: #1b2e40;
+}
+
+.people-page .people-table td:first-child {
+  color: #f1f5fa;
+  font-weight: 650;
+}
+
+.people-page .people-table td:nth-child(4),
+.people-page .people-table td:nth-child(7) {
+  font-variant-numeric: tabular-nums;
+}
+
+.people-page .people-table td:nth-last-child(-n + 2) {
+  min-width: 130px;
+}
+
+.people-page .people-table tbody tr:hover td {
+  background: #273e54;
+}
+
+.people-page .people-table tbody tr:focus-within td {
+  background: #273e54;
+}
+
+.people-page .people-table .people-delete-button {
+  color: #ffc0c6;
+  background: #3d2c3b;
+  border-color: #85566c;
+}
+
+.people-page .people-table .people-delete-button:hover:not(:disabled) {
+  background: #543347;
+  border-color: #bd7f94;
+}
+
+.people-page .people-retreat-filter select {
+  color: #e4ecf5;
+  background: #162838;
+  border-color: #62758d;
+}
+
+.people-page .people-retreat-filter {
+  max-width: 480px;
+  font-size: 16px;
+}
+
+.people-page .participant-email-toolbar {
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  background:
+    radial-gradient(ellipse at top right, rgba(160, 126, 238, 0.16), transparent 60%),
+    linear-gradient(115deg, #123d48, #26354d);
+  border: 1px solid rgba(149, 174, 231, 0.4);
+  border-left: 3px solid #aa9be7;
+  border-radius: 10px;
+}
+
+.participant-email-copy {
+  flex: 1 1 300px;
+  min-width: 0;
+}
+
+.participant-email-copy h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 6px;
+  color: #f0f7fa;
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.participant-email-copy h3 span {
+  padding: 3px 9px;
+  color: #e0d6ff;
+  background: rgba(174, 149, 238, 0.14);
+  border: 1px solid rgba(174, 149, 238, 0.4);
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.participant-email-copy p {
+  color: #d3e2e8;
+}
+
+.participant-email-copy small {
+  display: block;
+  margin-top: 5px;
+  color: #a9bdc7;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.participant-email-toolbar > button {
+  flex: 0 0 auto;
+}
+
+.people-page .participant-email-toolbar p,
+.participant-email-results,
+.email-action .retreat-feedback {
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.email-action > .retreat-secondary-button,
+.people-page .retreat-primary-button,
+.people-page .people-delete-button {
+  min-height: 42px;
+  padding: 9px 14px;
+  border-radius: 7px;
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.email-action > .retreat-secondary-button {
+  color: #d8f6f2;
+  background: #203d48;
+  border-color: #527984;
+  font-weight: 650;
+}
+
+.people-page .retreat-primary-button {
+  color: #092d32;
+  background: #8bd9d1;
+  border-color: #8bd9d1;
+}
+
+.people-page .participant-email-toolbar > .retreat-primary-button {
+  color: #25213c;
+  background: linear-gradient(120deg, #d6cbff, #b9d8fa);
+  border-color: #d6cbff;
+  box-shadow: 0 3px 12px rgba(8, 15, 30, 0.2);
+}
+
+.people-page .participant-email-toolbar > .retreat-primary-button:hover:not(:disabled) {
+  background: linear-gradient(120deg, #e4dcff, #cee5ff);
+  border-color: #e4dcff;
+}
+
+.email-action > .retreat-secondary-button:hover:not(:disabled) {
+  background: #2b515c;
+  border-color: #8bd9d1;
+}
+
+.email-action .retreat-feedback {
+  min-width: 200px;
+}
+
 .people-delete-button {
   padding: 6px 9px;
   color: #ffe0d7;
@@ -349,6 +658,84 @@
   box-shadow: 0 24px 70px rgba(3, 21, 33, 0.28), inset 0 1px rgba(255, 255, 255, 0.1);
 }
 
+.app-shell .organization-login-page {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding-top: clamp(145px, 19vh, 190px);
+  padding-bottom: 80px;
+  background-color: #102d3a;
+  background-image:
+    linear-gradient(135deg, rgba(10, 30, 39, 0.42), rgba(11, 34, 41, 0.32)),
+    url('/baground_stupa.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.app-shell .organization-login-page::before {
+  content: none;
+}
+
+.organization-login-page > .retreat-page-heading,
+.organization-login-page > .auth-card {
+  position: relative;
+  z-index: 1;
+  width: min(700px, 100%);
+  text-align: center;
+}
+
+.organization-login-page .retreat-page-heading {
+  margin-bottom: 27px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+
+.organization-login-page .retreat-page-heading > p {
+  font-size: 15px;
+  letter-spacing: 0.04em;
+}
+
+.organization-login-page .retreat-page-heading h1 {
+  font-size: clamp(40px, 6vw, 58px);
+  line-height: 1.2;
+}
+
+.organization-login-page .retreat-page-heading > span {
+  margin-top: 12px;
+  font-size: 16px;
+}
+
+.organization-login-page .auth-card {
+  position: relative;
+  max-width: 700px;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(145deg, rgba(14, 31, 35, 0.5), rgba(14, 31, 35, 0.36));
+  border-color: rgba(255, 241, 205, 0.36);
+  border-radius: 26px;
+  box-shadow: 0 28px 80px rgba(2, 15, 25, 0.38), inset 0 1px rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px) saturate(115%);
+  -webkit-backdrop-filter: blur(8px) saturate(115%);
+  text-align: left;
+}
+
+.organization-login-page .auth-card::before {
+  position: absolute;
+  z-index: -1;
+  top: -92px;
+  right: -78px;
+  width: 210px;
+  height: 210px;
+  border: 1px solid rgba(255, 241, 205, 0.14);
+  border-radius: 50%;
+  box-shadow: 0 0 0 18px rgba(255, 241, 205, 0.035);
+  content: '';
+  pointer-events: none;
+}
+
 .auth-card .retreat-card-heading {
   margin-bottom: 18px;
 }
@@ -356,6 +743,10 @@
 .auth-card .retreat-card-heading h2 {
   margin-top: 8px;
   font-size: 27px;
+}
+
+.organization-login-page .auth-card .retreat-card-heading h2 {
+  font-size: clamp(28px, 4vw, 34px);
 }
 
 .auth-card .retreat-card-kicker {
@@ -385,20 +776,20 @@
 }
 
 .auth-mode-switch button {
-  min-height: 42px;
+  min-height: 46px;
   color: rgba(255, 255, 255, 0.82);
   background: transparent;
   border: 1px solid transparent;
   border-radius: 8px;
   cursor: pointer;
   font: inherit;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .auth-mode-switch button.is-selected {
-  color: #193b3c;
-  background: linear-gradient(135deg, #fff1bd, #edc76e);
-  border-color: rgba(255, 241, 189, 0.9);
+  color: #17362e;
+  background: #b7ddc6;
+  border-color: #c5e7d2;
   font-weight: 750;
 }
 
@@ -412,7 +803,7 @@
   align-content: start;
   gap: 8px;
   color: rgba(255, 255, 255, 0.92);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 650;
 }
 
@@ -420,14 +811,14 @@
   display: block;
   width: 100%;
   min-width: 0;
-  min-height: 47px;
-  padding: 11px 13px;
+  min-height: 52px;
+  padding: 12px 14px;
   color: #fff;
   background: rgba(7, 35, 49, 0.64);
   border: 1px solid rgba(214, 240, 230, 0.28);
   border-radius: 10px;
   font: inherit;
-  font-size: 14px;
+  font-size: 16px;
   letter-spacing: 0.01em;
   transition: background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
 }
@@ -470,9 +861,9 @@
 
 .auth-submit {
   width: 100%;
-  min-height: 46px;
+  min-height: 52px;
   margin-top: 2px;
-  font-size: 13px;
+  font-size: 15px;
 }
 
 .auth-security-note {
@@ -482,8 +873,8 @@
   background: rgba(6, 39, 51, 0.26);
   border: 1px solid rgba(211, 239, 232, 0.15);
   border-radius: 10px;
-  font-size: 10px;
-  line-height: 1.8;
+  font-size: 12px;
+  line-height: 1.75;
 }
 
 .auth-security-note::before {
@@ -1020,7 +1411,879 @@
   scroll-margin-top: 112px;
 }
 
+.admin-dashboard-page {
+  --admin-ink: #edf4f8;
+  --admin-muted: #afc0cc;
+  --admin-line: #334957;
+  padding-right: clamp(16px, 3vw, 48px);
+  padding-left: clamp(16px, 3vw, 48px);
+}
+
+.organization-page.admin-dashboard-page > * {
+  width: min(1400px, 100%);
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.admin-dashboard-page > .retreat-page-heading {
+  margin-bottom: 18px;
+}
+
+.admin-dashboard-page .retreat-page-heading h1 {
+  font-size: clamp(30px, 3vw, 38px);
+}
+
+.admin-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.admin-overview .admin-welcome-panel,
+.admin-overview .account-profile-card {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.admin-overview .admin-welcome-panel {
+  gap: 14px;
+}
+
+.admin-overview .admin-welcome-copy h2 {
+  margin: 7px 0 4px;
+  font-size: 27px;
+}
+
+.admin-overview .admin-welcome-copy p {
+  font-size: 15px;
+}
+
+.admin-overview .retreat-card-heading {
+  margin-bottom: 12px;
+}
+
+.admin-overview .retreat-card-heading h2 {
+  font-size: 23px;
+}
+
+.admin-overview .account-profile-details {
+  gap: 8px;
+}
+
+.admin-overview .account-profile-details > div {
+  padding: 9px;
+}
+
+.admin-dashboard-page .admin-summary-card {
+  min-height: 100px;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 6px 10px;
+  padding: 13px 15px;
+  border-radius: 13px;
+}
+
+.admin-dashboard-page .admin-summary-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.admin-dashboard-page .admin-summary-card strong {
+  font-size: 30px;
+}
+
+.admin-dashboard-page .admin-quick-link {
+  min-height: 64px;
+  padding: 10px 12px;
+}
+
+.admin-dashboard-page > .create-retreat-card,
+.admin-dashboard-page > .account-card {
+  padding: 22px;
+}
+
+.admin-dashboard-page .admin-welcome-kicker,
+.admin-dashboard-page .retreat-card-kicker {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.admin-dashboard-page .admin-summary-card small,
+.admin-dashboard-page .account-profile-details dt,
+.admin-dashboard-page .profile-role-badge,
+.admin-dashboard-page .admin-account-badge {
+  font-size: 13px;
+}
+
+.admin-dashboard-page .account-profile-details dd,
+.admin-dashboard-page .admin-quick-link strong,
+.admin-dashboard-page .account-identity strong,
+.admin-dashboard-page .retreat-admin-list li > span,
+.admin-dashboard-page .retreat-create-form label {
+  font-size: 16px;
+}
+
+.admin-dashboard-page .admin-quick-link strong {
+  flex-wrap: wrap;
+}
+
+.admin-dashboard-page .admin-quick-link small,
+.admin-dashboard-page .account-identity span,
+.admin-dashboard-page .retreat-admin-list li small {
+  color: rgba(237, 245, 239, 0.85);
+  font-size: 14px;
+}
+
+.admin-dashboard-page .account-identity small,
+.admin-dashboard-page .retreat-feedback,
+.admin-dashboard-page .people-empty {
+  font-size: 14px;
+}
+
+.admin-dashboard-page .retreat-create-form input,
+.admin-dashboard-page .account-row select {
+  min-height: 44px;
+  font-size: 16px;
+}
+
+.admin-dashboard-page .admin-summary-card a {
+  justify-self: start;
+  padding: 5px 0;
+  font-size: 14px;
+}
+
+.admin-dashboard-page .retreat-primary-button,
+.admin-dashboard-page .retreat-secondary-button,
+.admin-dashboard-page .people-delete-button {
+  min-height: 44px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.admin-dashboard-page .retreat-primary-button {
+  color: #233323;
+  background: #e8c77e;
+  border-color: #e8c77e;
+  box-shadow: none;
+}
+
+.admin-dashboard-page .retreat-secondary-button {
+  color: #fff3d4;
+  background: rgba(10, 34, 43, 0.55);
+  border-color: rgba(211, 239, 232, 0.35);
+  box-shadow: none;
+}
+
+.admin-dashboard-page .people-delete-button {
+  color: #ffd5cd;
+  background: rgba(126, 38, 29, 0.32);
+  border-color: rgba(255, 161, 143, 0.45);
+}
+
+.admin-dashboard-page .retreat-primary-button:hover:not(:disabled),
+.admin-dashboard-page .retreat-secondary-button:hover:not(:disabled),
+.admin-dashboard-page .people-delete-button:hover:not(:disabled) {
+  box-shadow: none;
+  filter: none;
+  transform: none;
+}
+
+.admin-dashboard-page .retreat-primary-button:hover:not(:disabled) {
+  background: #f1d595;
+  border-color: #f1d595;
+}
+
+.admin-dashboard-page .retreat-secondary-button:hover:not(:disabled) {
+  background: rgba(255, 231, 178, 0.19);
+  border-color: rgba(255, 231, 178, 0.65);
+}
+
+.admin-dashboard-page .people-delete-button:hover:not(:disabled) {
+  background: rgba(159, 48, 36, 0.5);
+  border-color: #ffb4a3;
+}
+
+.admin-dashboard-page .admin-quick-link {
+  background: linear-gradient(135deg, rgba(28, 63, 65, 0.85), rgba(11, 34, 41, 0.8));
+  border-color: rgba(255, 226, 164, 0.28);
+}
+
+.admin-dashboard-page .admin-quick-link:hover {
+  background: linear-gradient(135deg, rgba(42, 82, 79, 0.95), rgba(20, 49, 55, 0.92));
+  border-color: rgba(255, 226, 164, 0.65);
+}
+
+.admin-dashboard-page .admin-welcome-panel {
+  background: linear-gradient(120deg, #123f4a, #1a5860);
+  border: 1px solid #39717a;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(8, 24, 35, 0.18);
+}
+
+.admin-dashboard-page .admin-welcome-kicker {
+  color: #b6e5e3;
+}
+
+.admin-dashboard-page .retreat-card,
+.admin-dashboard-page .admin-summary-card {
+  color: var(--admin-ink);
+  background: #182b37;
+  border-color: var(--admin-line);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(8, 24, 35, 0.12);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.admin-dashboard-page .retreat-card h2,
+.admin-dashboard-page .retreat-card h3,
+.admin-dashboard-page .account-profile-details dd,
+.admin-dashboard-page .admin-summary-card strong,
+.admin-dashboard-page .account-identity strong,
+.admin-dashboard-page .retreat-admin-list li > span,
+.admin-dashboard-page .retreat-create-form label,
+.admin-dashboard-page .account-password-form label {
+  color: var(--admin-ink);
+}
+
+.admin-dashboard-page .retreat-card-kicker,
+.admin-dashboard-page .admin-summary-card a,
+.admin-dashboard-page .account-identity small {
+  color: #7ddbd4;
+}
+
+.admin-dashboard-page .account-profile-details dt,
+.admin-dashboard-page .admin-summary-card small,
+.admin-dashboard-page .account-identity span,
+.admin-dashboard-page .retreat-admin-list li small,
+.admin-dashboard-page .people-empty,
+.admin-dashboard-page .people-privacy-note,
+.admin-dashboard-page .account-password-form small {
+  color: var(--admin-muted);
+}
+
+.admin-dashboard-page .account-profile-details > div,
+.admin-dashboard-page .retreat-create-form,
+.admin-dashboard-page .waiting-approval-section,
+.admin-dashboard-page .waiting-approval-row,
+.admin-dashboard-page .account-row,
+.admin-dashboard-page .retreat-admin-list li,
+.admin-dashboard-page .account-password-form {
+  background: #12232e;
+  border-color: var(--admin-line);
+  border-radius: 8px;
+}
+
+.admin-dashboard-page .retreat-create-actions,
+.admin-dashboard-page .retreat-admin-list {
+  border-color: var(--admin-line);
+}
+
+.admin-dashboard-page .retreat-create-form input,
+.admin-dashboard-page .account-row select,
+.admin-dashboard-page .account-password-form input {
+  color: var(--admin-ink);
+  background: #0e1e28;
+  border-color: #48606e;
+  border-radius: 8px;
+  color-scheme: dark;
+}
+
+.admin-dashboard-page .retreat-create-form input:focus,
+.admin-dashboard-page .account-row select:focus-visible,
+.admin-dashboard-page .account-password-form input:focus {
+  outline: 2px solid #087f87;
+  outline-offset: 2px;
+}
+
+.admin-dashboard-page .admin-summary-icon,
+.admin-dashboard-page .profile-role-badge {
+  color: #8fe1db;
+  background: #203f46;
+  border-color: #37636a;
+  border-radius: 8px;
+}
+
+.admin-dashboard-page .retreat-primary-button {
+  color: #082c30;
+  background: #76d3cb;
+  border-color: #76d3cb;
+  border-radius: 8px;
+}
+
+.admin-dashboard-page .retreat-primary-button:hover:not(:disabled) {
+  background: #9ce5df;
+  border-color: #9ce5df;
+}
+
+.admin-dashboard-page .retreat-secondary-button,
+.admin-dashboard-page .account-password-toggle {
+  color: #dce8ee;
+  background: #203642;
+  border: 1px solid #48606e;
+  border-radius: 8px;
+}
+
+.admin-dashboard-page .account-password-toggle {
+  justify-self: start;
+  min-height: 38px;
+  padding: 7px 12px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+
+.admin-dashboard-page .account-password-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.admin-dashboard-page .account-row {
+  grid-template-columns: minmax(0, 1fr) minmax(120px, 160px) auto auto auto;
+}
+
+.admin-dashboard-page .account-row .retreat-secondary-button {
+  min-height: 38px;
+  padding: 7px 12px;
+}
+
+.admin-dashboard-page .account-password-form {
+  display: flex;
+  grid-column: 1 / -1;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--admin-line);
+}
+
+.admin-dashboard-page .account-password-form label {
+  display: grid;
+  flex: 1 1 240px;
+  gap: 8px;
+  max-width: 460px;
+  font-size: 14px;
+}
+
+.admin-dashboard-page .account-password-form input {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 12px;
+  border: 1px solid #48606e;
+  font: inherit;
+}
+
+.admin-dashboard-page .account-password-form .retreat-primary-button {
+  align-self: center;
+}
+
+.admin-dashboard-page .retreat-secondary-button:hover:not(:disabled),
+.admin-dashboard-page .account-password-toggle:hover:not(:disabled) {
+  background: #2c4856;
+  border-color: #7b9ba9;
+}
+
+.admin-dashboard-page .people-delete-button {
+  color: #ffb7bb;
+  background: #40272f;
+  border-color: #85505b;
+  border-radius: 8px;
+}
+
+.admin-dashboard-page .people-delete-button:hover:not(:disabled) {
+  color: #ffdbdd;
+  background: #57313b;
+  border-color: #b37681;
+}
+
+.admin-dashboard-page .admin-welcome-actions .retreat-secondary-button {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.admin-dashboard-page .admin-welcome-actions .retreat-secondary-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.17);
+}
+
+.admin-dashboard-page .admin-quick-link {
+  color: var(--admin-ink);
+  background: #182b37;
+  border-color: var(--admin-line);
+  border-radius: 10px;
+}
+
+.admin-dashboard-page .admin-quick-link:hover {
+  background: #203c46;
+  border-color: #659e9e;
+}
+
+.admin-dashboard-page .admin-quick-link small {
+  color: var(--admin-muted);
+}
+
+.admin-dashboard-page .admin-quick-link > span:first-child,
+.admin-dashboard-page .admin-quick-link em {
+  color: #8fe1db;
+  background: #203f46;
+}
+
+.admin-dashboard-page .admin-quick-link b,
+.admin-dashboard-page .admin-summary-card a:hover {
+  color: #8fe1db;
+}
+
+.admin-dashboard-page .admin-account-badge {
+  color: #d4f0ef;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.admin-dashboard-page .admin-account-badge span {
+  color: #b6e5e3;
+}
+
+.admin-dashboard-page .retreat-feedback.is-error {
+  color: #ffd1c9;
+  background: #422b2e;
+  border-color: #91605e;
+}
+
+.admin-dashboard-page .retreat-feedback.is-success {
+  color: #b9efcf;
+  background: #203c33;
+  border-color: #4a8069;
+}
+
+.admin-dashboard-page .retreat-feedback.is-warning {
+  color: #ffe4ab;
+  background: #403522;
+  border-color: #8d7442;
+}
+
+:is(.organization-page, .people-page, .registration-page) {
+  --admin-ink: #fff4e9;
+  --admin-muted: #e6c6af;
+  --admin-line: rgba(215, 187, 132, 0.35);
+  --portal-inset: rgba(28, 38, 27, 0.4);
+  --portal-accent: #a9d8bd;
+}
+
+:is(.organization-page, .people-page, .registration-page) .retreat-card,
+.admin-dashboard-page .admin-summary-card,
+.admin-dashboard-page .admin-welcome-panel,
+.admin-dashboard-page .admin-quick-link {
+  color: #fff4e9;
+  background: linear-gradient(135deg, rgba(60, 65, 38, 0.58), rgba(31, 43, 32, 0.64));
+  border-color: var(--admin-line);
+  box-shadow: 0 8px 24px rgba(48, 25, 12, 0.2);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+}
+
+:is(.organization-page, .people-page, .registration-page) .retreat-create-form,
+.admin-dashboard-page .account-profile-details > div,
+.admin-dashboard-page .waiting-approval-section,
+.admin-dashboard-page .waiting-approval-row,
+.admin-dashboard-page .account-row,
+.admin-dashboard-page .retreat-admin-list li,
+.admin-dashboard-page .account-password-form,
+.people-page .participant-email-toolbar {
+  background: var(--portal-inset);
+  border-color: var(--admin-line);
+}
+
+:is(.organization-page, .people-page, .registration-page) :is(.auth-form, .registration-form, .retreat-create-form, .account-password-form) input,
+.registration-page .registration-form :is(select, textarea),
+.admin-dashboard-page .account-row select,
+.people-page .people-retreat-filter select {
+  color: #fff4e9;
+  background: rgba(27, 38, 27, 0.48);
+  border-color: rgba(225, 203, 160, 0.45);
+  color-scheme: dark;
+}
+
+:is(.organization-page, .people-page, .registration-page) input:focus,
+.registration-page .registration-form :is(select, textarea):focus {
+  outline: 2px solid #a9d8bd;
+  outline-offset: 2px;
+}
+
+:is(.organization-page, .people-page, .registration-page) .retreat-primary-button,
+.people-page .participant-email-toolbar > .retreat-primary-button {
+  color: #17362e;
+  background: linear-gradient(120deg, #c8e5ad, #91d4bf);
+  border-color: #c5e7bb;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), 0 3px 10px rgba(8, 30, 20, 0.18);
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+:is(.organization-page, .people-page, .registration-page) .retreat-primary-button:hover:not(:disabled),
+.people-page .participant-email-toolbar > .retreat-primary-button:hover:not(:disabled) {
+  background: linear-gradient(120deg, #dcf0c6, #afe6d4);
+  border-color: #e0f3d4;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.5), 0 4px 14px rgba(8, 30, 20, 0.25);
+}
+
+:is(.organization-page, .people-page, .registration-page) .retreat-secondary-button,
+.admin-dashboard-page .account-password-toggle {
+  color: #e0f2e7;
+  background: linear-gradient(120deg, rgba(68, 103, 70, 0.8), rgba(37, 79, 70, 0.85));
+  border-color: #8eb69b;
+  box-shadow: inset 0 1px rgba(223, 246, 220, 0.1);
+}
+
+:is(.organization-page, .people-page, .registration-page) .retreat-secondary-button:hover:not(:disabled),
+.admin-dashboard-page .account-password-toggle:hover:not(:disabled) {
+  background: linear-gradient(120deg, #527e54, #356e61);
+  border-color: #c2e6c6;
+}
+
+.admin-dashboard-page :is(.retreat-card-kicker, .admin-welcome-kicker, .admin-summary-card a, .admin-quick-link b, .admin-account-badge span),
+.people-page .participant-email-copy h3,
+.people-page .people-retreat-filter {
+  color: #ffce9d;
+}
+
+.admin-dashboard-page :is(.admin-summary-icon, .profile-role-badge, .admin-account-badge),
+.admin-dashboard-page .admin-quick-link > span:first-child,
+.admin-dashboard-page .admin-quick-link em,
+.people-page .participant-email-copy h3 span {
+  color: #d7eddf;
+  background: #365447;
+  border-color: #7b9f88;
+}
+
+.admin-dashboard-page .admin-quick-link:hover {
+  background: #466b58;
+  border-color: #a9d8bd;
+}
+
+.people-page .participant-email-copy p,
+.people-page .participant-email-copy small {
+  color: #f0d7c3;
+}
+
+.people-page .people-table-scroll {
+  background: rgba(27, 38, 27, 0.3);
+  border-color: var(--admin-line);
+  scrollbar-color: #b6a075 #293329;
+}
+
+.people-page .people-table th {
+  color: #ffe4c9;
+  background: rgba(88, 85, 49, 0.68);
+  border-color: var(--admin-line);
+}
+
+.people-page .people-table td {
+  color: #fff1e0;
+  background: rgba(37, 48, 33, 0.38);
+  border-bottom-color: var(--admin-line);
+}
+
+.people-page .people-table tbody tr:nth-child(even) td {
+  background: rgba(72, 76, 46, 0.4);
+}
+
+.people-page .people-table tbody tr:is(:hover, :focus-within) td {
+  background: rgba(111, 102, 60, 0.5);
+}
+
+.admin-dashboard-page > .retreat-page-heading {
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(218, 228, 193, 0.25);
+}
+
+.admin-dashboard-page .admin-welcome-panel {
+  position: relative;
+  background:
+    radial-gradient(ellipse at top right, rgba(196, 218, 142, 0.2), transparent 70%),
+    linear-gradient(125deg, rgba(52, 74, 47, 0.82), rgba(24, 47, 38, 0.78));
+  border-color: rgba(192, 220, 159, 0.45);
+  border-radius: 16px;
+}
+
+.admin-dashboard-page .admin-welcome-copy {
+  min-width: 0;
+  padding-left: 14px;
+  border-left: 3px solid #c6dfa0;
+}
+
+.admin-dashboard-page .admin-welcome-copy h2 {
+  font-size: clamp(28px, 2.5vw, 34px);
+  overflow-wrap: anywhere;
+}
+
+.admin-dashboard-page .admin-overview .account-profile-card {
+  background: rgba(36, 51, 37, 0.7);
+}
+
+.admin-dashboard-page .admin-summary-card {
+  --summary-accent: #bbdfa7;
+  position: relative;
+  min-height: 120px;
+  padding: 17px;
+  background: rgba(31, 48, 36, 0.78);
+  border-color: rgba(210, 226, 190, 0.25);
+  border-top: 3px solid var(--summary-accent);
+  border-radius: 12px;
+}
+
+.admin-dashboard-page .admin-summary-card:nth-child(2) {
+  --summary-accent: #a7d6df;
+}
+
+.admin-dashboard-page .admin-summary-card:nth-child(3) {
+  --summary-accent: #cbbce9;
+}
+
+.admin-dashboard-page .admin-summary-card:nth-child(4) {
+  --summary-accent: #e6ca98;
+}
+
+.admin-dashboard-page .admin-summary-card:nth-child(5) {
+  --summary-accent: #edb6a0;
+}
+
+.admin-dashboard-page .admin-summary-icon {
+  color: var(--summary-accent);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.admin-dashboard-page .admin-summary-card strong {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.admin-dashboard-page .admin-summary-card a {
+  color: var(--summary-accent);
+}
+
+.admin-dashboard-page .admin-quick-link {
+  gap: 12px;
+  padding: 15px;
+  background: rgba(40, 58, 42, 0.78);
+  border-color: rgba(210, 226, 190, 0.28);
+  border-radius: 12px;
+}
+
+.admin-dashboard-page .admin-quick-link:hover {
+  background: rgba(65, 87, 57, 0.9);
+  border-color: #b5ce99;
+  transform: none;
+}
+
+.admin-dashboard-page .admin-quick-link > span:first-child {
+  color: #d3e6ba;
+  background: rgba(190, 217, 153, 0.12);
+  border: 1px solid rgba(190, 217, 153, 0.2);
+}
+
+.admin-dashboard-page > :is(.create-retreat-card, .account-card) {
+  margin-top: 24px;
+  background: rgba(37, 50, 36, 0.78);
+  border-color: rgba(210, 226, 190, 0.3);
+  border-radius: 16px;
+}
+
+.admin-dashboard-page > :is(.create-retreat-card, .account-card) > .retreat-card-heading {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(210, 226, 190, 0.2);
+}
+
+.admin-dashboard-page .retreat-card-kicker {
+  color: #c9dfa9;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+}
+
+.admin-dashboard-page :is(.account-row, .waiting-approval-row) {
+  padding: 14px;
+  border-color: rgba(210, 226, 190, 0.2);
+}
+
+:is(.organization-page, .people-page, .registration-page) {
+  --admin-ink: #f0f7f8;
+  --admin-muted: #bdd2d8;
+  --admin-line: rgba(178, 215, 223, 0.3);
+  --portal-inset: rgba(10, 39, 51, 0.38);
+}
+
+:is(.organization-page, .people-page, .registration-page) .retreat-card,
+.admin-dashboard-page .admin-welcome-panel,
+.admin-dashboard-page .admin-summary-card,
+.admin-dashboard-page .admin-quick-link,
+.admin-dashboard-page .dashboard-section {
+  background: linear-gradient(135deg, rgba(28, 79, 91, 0.64), rgba(17, 57, 75, 0.58));
+  border: 1px solid var(--admin-line);
+  border-radius: 14px;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+}
+
+.admin-dashboard-page .admin-summary-card {
+  border-top: 3px solid var(--summary-accent);
+}
+
+:is(.organization-page, .people-page, .registration-page) .retreat-primary-button,
+.people-page .participant-email-toolbar > .retreat-primary-button {
+  color: #233a3c;
+  background: linear-gradient(125deg, #fff0bc, #eac873);
+  border-color: #efda9f;
+  box-shadow: none;
+}
+
+:is(.organization-page, .people-page, .registration-page) .retreat-primary-button:hover:not(:disabled),
+.people-page .participant-email-toolbar > .retreat-primary-button:hover:not(:disabled) {
+  background: #fff0bc;
+  border-color: #fff0bc;
+}
+
+:is(.organization-page, .people-page, .registration-page) .retreat-secondary-button,
+.admin-dashboard-page .account-password-toggle {
+  color: #eff8f8;
+  background: rgba(135, 186, 197, 0.14);
+  border-color: rgba(178, 215, 223, 0.45);
+}
+
+:is(.organization-page, .people-page, .registration-page) .retreat-secondary-button:hover:not(:disabled),
+.admin-dashboard-page .account-password-toggle:hover:not(:disabled),
+.admin-dashboard-page .admin-quick-link:hover {
+  background: rgba(87, 144, 158, 0.3);
+  border-color: #a4cdd5;
+}
+
+:is(.organization-page, .people-page, .registration-page) :is(.auth-form, .registration-form, .retreat-create-form, .account-password-form) input,
+.registration-page .registration-form :is(select, textarea),
+.people-page .people-retreat-filter select,
+.admin-dashboard-page .account-row select {
+  color: #f0f7f8;
+  background: rgba(8, 35, 48, 0.55);
+  border-color: #7195a0;
+}
+
+.people-page .participant-email-toolbar {
+  background: rgba(9, 37, 49, 0.4);
+  border: 1px solid var(--admin-line);
+}
+
+.people-page .people-table-scroll {
+  background: rgba(9, 37, 49, 0.3);
+  border-color: var(--admin-line);
+  scrollbar-color: #7195a0 #123442;
+}
+
+.people-page .people-table th {
+  color: #f0f7f8;
+  background: rgba(36, 92, 104, 0.8);
+  border-color: var(--admin-line);
+}
+
+.people-page .people-table td {
+  color: #f0f7f8;
+  background: rgba(16, 51, 65, 0.4);
+  border-bottom-color: var(--admin-line);
+}
+
+.people-page .people-table tbody tr:nth-child(even) td {
+  background: rgba(34, 74, 87, 0.4);
+}
+
+.people-page .people-table tbody tr:is(:hover, :focus-within) td {
+  background: rgba(63, 113, 127, 0.45);
+}
+
+.people-page .participant-email-copy :is(p, small) {
+  color: #bdd2d8;
+}
+
+.people-page .participant-email-copy h3 span {
+  color: #f5e4ae;
+  background: rgba(239, 218, 159, 0.12);
+  border-color: rgba(239, 218, 159, 0.35);
+}
+
+.admin-dashboard-page .dashboard-section {
+  min-width: 0;
+  margin-bottom: 16px;
+}
+
+.admin-dashboard-page .admin-overview > .dashboard-section {
+  margin-bottom: 0;
+  align-self: start;
+}
+
+.dashboard-section > summary,
+.admin-dashboard-page .waiting-approval-heading {
+  padding: 18px 20px;
+  color: #f5e4ae;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 650;
+  list-style: none;
+}
+
+.dashboard-section > summary::after,
+.admin-dashboard-page .waiting-approval-heading::after {
+  float: right;
+  margin-left: 12px;
+  content: '+';
+}
+
+.dashboard-section[open] > summary::after,
+.admin-dashboard-page .waiting-approval-section[open] > summary::after {
+  content: '-';
+}
+
+.dashboard-section > summary::-webkit-details-marker,
+.admin-dashboard-page .waiting-approval-heading::-webkit-details-marker {
+  display: none;
+}
+
+.dashboard-section-body {
+  padding: 0 16px 16px;
+}
+
+.admin-dashboard-page .dashboard-section-body > .retreat-card {
+  width: 100%;
+  margin: 0;
+  padding: 20px;
+  background: rgba(9, 37, 49, 0.25);
+}
+
+.admin-dashboard-page .waiting-approval-heading {
+  margin: 0;
+  padding: 4px 0;
+}
+
+.admin-dashboard-page .waiting-approval-section[open] > summary {
+  margin-bottom: 16px;
+}
+
 @media (max-width: 1050px) {
+  .admin-dashboard-page .account-row {
+    grid-template-columns: minmax(0, 1fr) minmax(120px, 160px);
+  }
+
+  .admin-overview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .admin-summary-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1146,5 +2409,19 @@
   .account-row .retreat-secondary-button {
     grid-column: 1 / -1;
     width: 100%;
+  }
+
+  .admin-dashboard-page .account-row .retreat-secondary-button {
+    grid-column: auto;
+    justify-self: start;
+    width: auto;
+  }
+
+  .admin-dashboard-page .account-row > .account-identity {
+    grid-column: 1 / -1;
+  }
+
+  .admin-dashboard-page .account-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

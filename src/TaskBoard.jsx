@@ -193,12 +193,12 @@ function TaskBoard() {
       setNotice('वेळापत्रकात जोडण्यासाठी Activity भरा.')
       return
     }
-    const incompleteRow = filledRows.find((row) => !row.date || !row.startTime || !row.endTime)
+    const incompleteRow = filledRows.find((row) => !row.date || !row.startTime)
     if (incompleteRow) {
-      setNotice('प्रत्येक Activity साठी Date, Start Time आणि End Time भरा.')
+      setNotice('प्रत्येक Activity साठी Date आणि Start Time भरा. End Time ऐच्छिक आहे.')
       return
     }
-    const invalidRange = filledRows.find((row) => row.endTime <= row.startTime)
+    const invalidRange = filledRows.find((row) => row.endTime && row.endTime <= row.startTime)
     if (invalidRange) {
       setNotice('End Time ही Start Time नंतरची असावी.')
       return
@@ -248,11 +248,11 @@ function TaskBoard() {
   const updateEdit = (field, value) => setEditingRow((current) => ({ ...current, [field]: value }))
 
   const saveEdit = () => {
-    if (!editingRow?.activity.trim() || !editingRow.date || !editingRow.startTime || !editingRow.endTime) {
-      setNotice('Activity, Date, Start Time आणि End Time आवश्यक आहेत.')
+    if (!editingRow?.activity.trim() || !editingRow.date || !editingRow.startTime) {
+      setNotice('Activity, Date आणि Start Time आवश्यक आहेत. End Time ऐच्छिक आहे.')
       return
     }
-    if (editingRow.endTime <= editingRow.startTime) {
+    if (editingRow.endTime && editingRow.endTime <= editingRow.startTime) {
       setNotice('End Time ही Start Time नंतरची असावी.')
       return
     }
@@ -340,7 +340,7 @@ function TaskBoard() {
             <div className="composer-table-scroll">
               <table className="composer-table">
                 <thead>
-                  <tr><th>Sr. No.</th><th>Activity</th><th>Date (IST)</th><th>Start Time (IST)</th><th>End Time (IST)</th><th>Notes</th><th>काढा</th></tr>
+                  <tr><th>Sr. No.</th><th>Activity</th><th>Date (IST)</th><th>Start Time (IST)</th><th>End Time (IST, optional)</th><th>Notes</th><th>काढा</th></tr>
                 </thead>
                 <tbody>
                   {drafts.map((row, index) => (

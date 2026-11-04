@@ -13,15 +13,18 @@ export async function requestApi(path, options = {}, token) {
 
   if (!response.ok) {
     let message = `Request failed (${response.status}).`
+    let emailNotification
     try {
       const body = await response.json()
       if (typeof body.error === 'string') message = body.error
+      emailNotification = body.emailNotification
     } catch (error) {
       if (!(error instanceof SyntaxError)) throw error
     }
 
     const requestError = new Error(message)
     requestError.status = response.status
+    requestError.emailNotification = emailNotification
     throw requestError
   }
 

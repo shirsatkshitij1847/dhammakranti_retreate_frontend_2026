@@ -11,15 +11,19 @@ export async function downloadReport(report, { title, filename }) {
   const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'landscape' })
   pdf.setProperties({ title, author: 'Triratna Bauddha Mahasangh, Akola' })
   for (const [index, page] of pages.entries()) {
+    const captureWidth = Math.max(page.offsetWidth, (page.querySelector('table')?.scrollWidth || 0) + 64)
     const canvas = await html2canvas(page, {
       scale: 2,
       useCORS: true,
       backgroundColor: '#fffdf6',
-      width: 1100,
-      windowWidth: 1100,
+      width: captureWidth,
+      windowWidth: captureWidth,
       onclone: (clonedDocument) => {
         clonedDocument.querySelectorAll('.print-report').forEach((element) => {
           Object.assign(element.style, { position: 'static', visibility: 'visible', zIndex: 'auto' })
+        })
+        clonedDocument.querySelectorAll('.print-page').forEach((element) => {
+          element.style.width = `${captureWidth}px`
         })
       },
     })
@@ -34,9 +38,9 @@ export async function downloadReport(report, { title, filename }) {
     }
     if (!visible) throw new Error('PDF rendered without visible content.')
     if (index) pdf.addPage()
-    const ratio = Math.min(281 / canvas.width, 194 / canvas.height)
+    const ratio = Math.min(289 / canvas.width, 202 / canvas.height)
     const width = canvas.width * ratio
-    pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', (297 - width) / 2, 8, width, canvas.height * ratio)
+    pdf.addImage(canvas.toDataURL('image/jpeg', 0.96), 'JPEG', (297 - width) / 2, 4, width, canvas.height * ratio)
   }
   pdf.save(filename)
 }

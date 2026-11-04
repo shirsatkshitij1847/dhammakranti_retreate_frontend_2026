@@ -1,6 +1,6 @@
 import './PdfReport.css'
 
-export default function PdfReport({ reportRef, title, subtitle, columns, rows, confidential = false, rowsPerPage = 6 }) {
+export default function PdfReport({ reportRef, title, subtitle, columns, rows, confidential = false, rowsPerPage = 4 }) {
   const pageCount = Math.ceil(rows.length / rowsPerPage)
   return (
     <div className="print-report" ref={reportRef} aria-hidden="true">

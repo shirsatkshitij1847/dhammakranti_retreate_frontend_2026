@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { API_BASE_URL, requestApi } from './retreatApi'
+import { blogPlainText, getBlogTextFormat, sanitizeBlogHtml } from './blogContent'
 import './BlogPage.css'
 
 const PAGE_SIZE = 10
 const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const BlogEditor = lazy(() => import('./BlogEditor'))
 
 function BlogPage({ account, token, authLoading }) {
   const [blogs, setBlogs] = useState([])
@@ -16,6 +18,7 @@ function BlogPage({ account, token, authLoading }) {
   const [detailId, setDetailId] = useState(null)
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
+  const [textFormat, setTextFormat] = useState('html')
   const fileRef = useRef(null)
   const formRef = useRef(null)
   const canPublish = ['organizer', 'admin'].includes(account?.role)
@@ -40,6 +43,7 @@ function BlogPage({ account, token, authLoading }) {
     setEditing(null)
     setTitle('')
     setText('')
+    setTextFormat('html')
     if (fileRef.current) fileRef.current.value = ''
   }
 
@@ -62,11 +66,12 @@ function BlogPage({ account, token, authLoading }) {
 
   const publish = async (event) => {
     event.preventDefault()
+    if (busy) return
     setError('')
     setNotice('')
     const file = fileRef.current.files[0]
-    if (!title.trim() || !text.trim()) {
-      setError('Title and text cannot be blank.')
+    if (!title.trim() || !blogPlainText({ text, textFormat }).trim() || text.trim().length > 20000) {
+      setError('Title and story cannot be blank. Story must be at most 20,000 characters including formatting.')
       return
     }
     if ((!editing && !file) || (file && (!IMAGE_TYPES.includes(file.type) || file.size > 5 * 1024 * 1024))) {
@@ -75,7 +80,10 @@ function BlogPage({ account, token, authLoading }) {
     }
     const data = new FormData()
     if (!editing || title.trim() !== editing.title) data.append('title', title.trim())
-    if (!editing || text.trim() !== editing.text) data.append('text', text.trim())
+    if (!editing || text.trim() !== editing.text || textFormat !== (editing.textFormat || 'plain')) {
+      data.append('text', text.trim())
+      data.append('textFormat', textFormat)
+    }
     if (file) data.append('image', file)
     if ([...data.keys()].length === 0) {
       setError('Change the title, text, or image before saving.')
@@ -123,7 +131,9 @@ function BlogPage({ account, token, authLoading }) {
   return (
     <main className="blog-page">
       <header className="blog-heading">
+        <p className="story-kicker">THE COMMUNITY JOURNAL</p>
         <h1>News &amp; Stories</h1>
+        <p className="blog-heading-copy">Moments of friendship. Stories of transformation. A little inspiration for your journey.</p>
       </header>
       {!authLoading && canPublish && (
         <form className="blog-editor" ref={formRef} onSubmit={publish}>
@@ -137,9 +147,10 @@ function BlogPage({ account, token, authLoading }) {
               <input type="file" ref={fileRef} accept="image/jpeg,image/png,image/webp" required={!editing} />
             </label>
             {editing && <p>Leave the image field empty to keep the current image.</p>}
-            <label>Text
-              <textarea value={text} onChange={(event) => setText(event.target.value)} maxLength={20000} rows={7} required />
-            </label>
+            <Suspense fallback={<p role="status">Loading editor…</p>}>
+              <BlogEditor key={editing?._id || 'new'} value={text} textFormat={textFormat}
+                disabled={busy} onChange={(html) => { setText(html); setTextFormat('html') }} />
+            </Suspense>
             <div className="blog-actions">
               <button type="submit">{busy ? 'Saving…' : editing ? 'Save changes' : 'Publish'}</button>
               {editing && <button type="button" onClick={resetForm}>Cancel editing</button>}
@@ -161,11 +172,13 @@ function BlogPage({ account, token, authLoading }) {
               }}>{blog.title}</h2>
               <div className="story-meta">
                 <span>News &amp; Stories</span>
-                <span>{Math.max(1, Math.ceil(blog.text.trim().split(/\s+/).length / 200))} min read</span>
+                <span>{Math.max(1, Math.ceil(blogPlainText(blog).trim().split(/\s+/).length / 200))} min read</span>
                 {blog.createdAt && <time dateTime={blog.createdAt}>{new Date(blog.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kolkata' })}</time>}
               </div>
               <img src={new URL(blog.imageUrl, `${API_BASE_URL}/`).href + `?v=${encodeURIComponent(blog.updatedAt || '')}`} alt={blog.title} loading="lazy" />
-              <p className="blog-text">{detailId ? blog.text : `${blog.text.slice(0, 240)}${blog.text.length > 240 ? '…' : ''}`}</p>
+              {detailId && getBlogTextFormat(blog) === 'html'
+                ? <div className="blog-text blog-formatted-content" dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(blog.text) }} />
+                : <p className="blog-text">{detailId ? blog.text : `${blogPlainText(blog).slice(0, 240)}${blogPlainText(blog).length > 240 ? '…' : ''}`}</p>}
               {!detailId && <button
                 type="button"
                 aria-label={`View more: ${blog.title}`}
@@ -179,6 +192,7 @@ function BlogPage({ account, token, authLoading }) {
                   setEditing(blog)
                   setTitle(blog.title)
                   setText(blog.text)
+                  setTextFormat(getBlogTextFormat(blog))
                   fileRef.current.value = ''
                   formRef.current.scrollIntoView({ block: 'start' })
                 }}>Edit</button>

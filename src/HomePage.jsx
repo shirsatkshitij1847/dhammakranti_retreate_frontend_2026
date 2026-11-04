@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import UpcomingRetreats from './UpcomingRetreats'
 
 const galleryPhotos = Object.entries(import.meta.glob('../photos/*.{jpg,jpeg,png,webp}', {
   eager: true,
@@ -91,6 +92,7 @@ function HomePage() {
           <span className="buddha-art-caption">शांती · मैत्री · प्रज्ञा</span>
         </div>
       </section>
+      <UpcomingRetreats />
     </main>
   )
 }

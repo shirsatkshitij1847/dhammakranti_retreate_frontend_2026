@@ -6,6 +6,8 @@ import BlogPage from './BlogPage'
 import ProfileMenu from './ProfileMenu'
 import RetreatPortal from './RetreatPortal'
 import { requestApi, SESSION_TOKEN_KEY } from './retreatApi'
+import { getEmailFeedback } from './emailNotification'
+import useEmailFeedback from './useEmailFeedback'
 import TaskBoard from './TaskBoard'
 
 const chapters = [
@@ -27,7 +29,7 @@ function App() {
   const marqueeTrackRef = useRef(null)
   const pendingProtectedPageRef = useRef(null)
   const [currentPage, setCurrentPage] = useState(pageFromHash)
-  const [emailWarning, setEmailWarning] = useState('')
+  const [emailFeedback, setEmailFeedback] = useEmailFeedback()
   const [session, setSession] = useState(() => {
     const token = window.sessionStorage.getItem(SESSION_TOKEN_KEY)
     return { token, account: null, loading: Boolean(token) }
@@ -58,7 +60,7 @@ function App() {
     if (!session.token) return undefined
 
     const controller = new AbortController()
-    requestApi('/api/profile', { signal: controller.signal }, session.token)
+    requestApi('/api/auth/me', { signal: controller.signal }, session.token)
       .then((account) => {
         setSession((current) => current.token === session.token
           ? { ...current, account, loading: false }
@@ -74,28 +76,28 @@ function App() {
     return () => controller.abort()
   }, [session.token])
 
-  const acceptLogin = useCallback((authResult) => {
-    setEmailWarning(authResult.emailNotification?.status === 'failed' ? authResult.emailNotification.message : '')
+  const acceptLogin = useCallback((authResult, context = 'login') => {
+    setEmailFeedback(getEmailFeedback(authResult.emailNotification, context))
     window.sessionStorage.setItem(SESSION_TOKEN_KEY, authResult.token)
     setSession({ token: authResult.token, account: authResult.account, loading: false })
     if (pendingProtectedPageRef.current) {
       window.location.hash = `#${pendingProtectedPageRef.current}`
       pendingProtectedPageRef.current = null
     }
-  }, [])
+  }, [setEmailFeedback])
 
   const logout = useCallback(() => {
-    setEmailWarning('')
+    setEmailFeedback(null)
     window.sessionStorage.removeItem(SESSION_TOKEN_KEY)
     setSession({ token: null, account: null, loading: false })
-  }, [])
+  }, [setEmailFeedback])
 
   const refreshAccount = useCallback(async () => {
     const token = session.token
     if (!token) return null
 
     try {
-      const account = await requestApi('/api/profile', {}, token)
+      const account = await requestApi('/api/auth/me', {}, token)
       setSession((current) => current.token === token ? { ...current, account } : current)
       return account
     } catch (error) {
@@ -181,9 +183,9 @@ function App() {
         </nav>
         <ProfileMenu key={session.account?._id || 'guest'} account={session.account} loading={session.loading} onLogout={logout} />
       </header>
-      {emailWarning && <div className="email-delivery-warning" role="alert">
-        <span>{emailWarning}</span>
-        <button type="button" onClick={() => setEmailWarning('')} aria-label="Dismiss email notification">Dismiss</button>
+      {emailFeedback && <div className={`email-delivery-warning${emailFeedback.warning ? '' : ' is-success'}`} role={emailFeedback.warning ? 'alert' : 'status'}>
+        <span>{emailFeedback.message}</span>
+        <button type="button" onClick={() => setEmailFeedback(null)} aria-label="Dismiss email notification">Dismiss</button>
       </div>}
 
       {currentPage === 'blogs' ? (
