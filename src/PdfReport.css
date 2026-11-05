@@ -138,3 +138,44 @@
   color: #896b30;
   letter-spacing: 0.2em;
 }
+
+.print-report-timetable .print-table {
+  table-layout: fixed;
+}
+
+.print-report-timetable .print-table th,
+.print-report-timetable .print-table td {
+  padding: 18px 12px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.6;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.print-report-timetable .print-table th {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.print-report-timetable .print-table th:first-child {
+  width: 5%;
+}
+
+.print-report-timetable .print-table th:nth-child(2) {
+  width: 25%;
+}
+
+.print-report-timetable .print-table th:nth-child(3) {
+  width: 16%;
+}
+
+.print-report-timetable .print-table th:nth-child(4),
+.print-report-timetable .print-table th:nth-child(5) {
+  width: 15%;
+}
+
+.print-report-timetable .print-header h2 {
+  font-size: 26px;
+  font-weight: 800;
+}

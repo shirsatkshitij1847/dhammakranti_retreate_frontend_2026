@@ -159,3 +159,7 @@ On each fresh launch/reload from November 3 through November 7, 2026 (India time
 - Timetable activities require a date and start time; end time is optional in creation and editing. A supplied end time must be after the start time. Empty end times remain empty in storage and show a dash in the table and PDF.
 
 Run `npm run lint` and `npm run build` to validate the frontend.
+
+Timetable PDFs use larger bold table text (24px body, 22px headings) and fixed-width
+columns that wrap long activities/notes instead of widening and shrinking the report.
+Participant PDF typography remains unchanged.

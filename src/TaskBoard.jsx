@@ -406,6 +406,7 @@ function TaskBoard() {
       <p className="task-storage-note">वेळापत्रक या ब्राउझरमध्ये आपोआप जतन होते.</p>
 
       <PdfReport
+        variant="timetable"
         reportRef={pdfReportRef}
         title="Dhammakranti Shibir 2026"
         subtitle={showCompleted ? 'Completed Timetable' : 'Activity Timetable'}

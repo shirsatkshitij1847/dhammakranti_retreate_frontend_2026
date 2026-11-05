@@ -1,9 +1,9 @@
 import './PdfReport.css'
 
-export default function PdfReport({ reportRef, title, subtitle, columns, rows, confidential = false, rowsPerPage = 4 }) {
+export default function PdfReport({ reportRef, title, subtitle, columns, rows, confidential = false, rowsPerPage = 4, variant }) {
   const pageCount = Math.ceil(rows.length / rowsPerPage)
   return (
-    <div className="print-report" ref={reportRef} aria-hidden="true">
+    <div className={`print-report${variant === 'timetable' ? ' print-report-timetable' : ''}`} ref={reportRef} aria-hidden="true">
       {Array.from({ length: pageCount }, (_, index) => (
         <section className="print-page" key={index}>
           <div className="print-frame">
